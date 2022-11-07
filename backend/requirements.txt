@@ -1,1 +1,2 @@
 django-ninja==0.19.1
+environs==9.5.0
