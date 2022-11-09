@@ -16,6 +16,7 @@ class CustomUser(AbstractUser):
     )
     username = None
     email = models.EmailField(unique=True, verbose_name=_("email address"))
+    auth_token = models.CharField(max_length=255, blank=True, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -31,3 +32,7 @@ class CustomUser(AbstractUser):
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}" if self.first_name else self.email
+
+    def generate_auth_token(self):
+        self.auth_token = uuid.uuid4()
+        return self.auth_token

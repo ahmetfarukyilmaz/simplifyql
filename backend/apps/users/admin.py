@@ -29,6 +29,7 @@ class CustomUserAdmin(UserAdmin):
                     "password",
                     "first_name",
                     "last_name",
+                    "auth_token",
                 )
             },
         ),
