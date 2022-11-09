@@ -8,7 +8,15 @@ import {
   Text,
   Anchor,
 } from '@mantine/core'
+import { showNotification } from '@mantine/notifications'
+import { useForm } from '@mantine/form'
 import { Link } from 'react-router-dom'
+import request from '../utils/request'
+
+interface IRegister {
+  email: string
+  password: string
+}
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -46,7 +54,39 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export function RegisterPage() {
+  if (localStorage.getItem('token')) {
+    window.location.href = '/'
+  }
+
   const { classes } = useStyles()
+  const form = useForm({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+
+    validate: {
+      email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
+      password: (val) =>
+        val.length < 6 ? 'Password should include at least 6 characters' : null,
+    },
+  })
+
+  const onSubmit = async (values: IRegister) => {
+    try {
+      const response = await request.post('/users/register', values)
+      const token = response.data.auth_token
+      localStorage.setItem('token', token)
+      window.location.href = '/'
+    } catch (error: any) {
+      showNotification({
+        title: 'Error',
+        message: error.response.data.detail || 'Something went wrong',
+        color: 'red',
+      })
+    }
+  }
+
   return (
     <div className={classes.wrapper}>
       <Paper className={classes.form} radius={0} p={30}>
@@ -59,21 +99,37 @@ export function RegisterPage() {
         >
           Register to SimplifyQL
         </Title>
-
-        <TextInput
-          label="Email address"
-          placeholder="hello@gmail.com"
-          size="md"
-        />
-        <PasswordInput
-          label="Password"
-          placeholder="Your password"
-          mt="md"
-          size="md"
-        />
-        <Button fullWidth mt="xl" size="md">
-          Register
-        </Button>
+        <form onSubmit={form.onSubmit(onSubmit)}>
+          <TextInput
+            required
+            value={form.values.email}
+            onChange={(event) =>
+              form.setFieldValue('email', event.currentTarget.value)
+            }
+            label="Email address"
+            placeholder="hello@gmail.com"
+            size="md"
+            error={form.errors.email && 'Invalid email'}
+          />
+          <PasswordInput
+            required
+            value={form.values.password}
+            onChange={(event) =>
+              form.setFieldValue('password', event.currentTarget.value)
+            }
+            label="Password"
+            placeholder="Your password"
+            mt="md"
+            size="md"
+            error={
+              form.errors.password &&
+              'Password should include at least 6 characters'
+            }
+          />
+          <Button fullWidth mt="xl" size="md" type="submit">
+            Register
+          </Button>
+        </form>
 
         <Text align="center" mt="md">
           Already have an account?{' '}

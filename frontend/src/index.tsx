@@ -5,6 +5,7 @@ import './index.css'
 import App from './App'
 import { LoginPage, NotFoundPage, RegisterPage } from './pages'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { NotificationsProvider } from '@mantine/notifications'
 
 const router = createBrowserRouter([
   { path: '/', element: <App /> },
@@ -17,7 +18,9 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      <RouterProvider router={router} />
+      <NotificationsProvider>
+        <RouterProvider router={router} />
+      </NotificationsProvider>
     </MantineProvider>
   </React.StrictMode>
 )

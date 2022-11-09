@@ -1,31 +1,33 @@
 from django.contrib.auth import get_user_model
 from ninja import Router
 
-from .schema import Register
+from .schema import Error, Register, User
 
 router = Router()
-User = get_user_model()
+UserModel = get_user_model()
 
 
-@router.post("/register")
+@router.post("/register", response={201: User, 400: Error})
 def register(request, payload: Register):
-    user = User.objects.create_user(payload.email, payload.password)
-    return {
-        "id": user.id,
-        "email": user.email,
-        "auth_token": user.auth_token,
-    }
+    if UserModel.objects.filter(email=payload.email).exists():
+        return 400, Error(detail="Email already exists")
+    user = UserModel.objects.create_user(payload.email, payload.password)
+    return 201, User(
+        id=user.id,
+        email=user.email,
+        auth_token=user.auth_token,
+    )
 
 
-@router.post("/login")
+@router.post("/login", response={200: User, 400: Error})
 def login(request, payload: Register):
-    user = User.objects.filter(email=payload.email).first()
+    user = UserModel.objects.filter(email=payload.email).first()
     if user is None:
-        return {"detail": "User not found"}
+        return 400, Error(detail="User not found")
     if user.check_password(payload.password):
-        return {
-            "id": user.id,
-            "email": user.email,
-            "auth_token": user.auth_token,
-        }
-    return {"detail": "Invalid credentials"}
+        return 200, User(
+            id=user.id,
+            email=user.email,
+            auth_token=user.auth_token,
+        )
+    return 400, Error(detail="Invalid credentials")
