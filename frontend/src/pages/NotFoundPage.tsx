@@ -6,7 +6,7 @@ import {
   Button,
   Group,
 } from '@mantine/core'
-import { Illustration } from '../static/Illustration'
+import { Illustration } from 'static/Illustration'
 import { Link } from 'react-router-dom'
 const useStyles = createStyles((theme) => ({
   root: {

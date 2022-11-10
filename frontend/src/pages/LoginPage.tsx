@@ -11,7 +11,7 @@ import {
 import { showNotification } from '@mantine/notifications'
 import { useForm } from '@mantine/form'
 import { Link } from 'react-router-dom'
-import request from '../utils/request'
+import request from 'utils/request'
 
 interface ILogin {
   email: string

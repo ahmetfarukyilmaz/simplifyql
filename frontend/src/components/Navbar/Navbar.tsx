@@ -1,9 +1,17 @@
 import { Navbar as MantineNavbar } from '@mantine/core'
-
+import {
+  Table,
+  TableAttribute,
+  DataTypes,
+  AttributeConstraints,
+} from 'components'
 export default function Navbar() {
   return (
     <MantineNavbar
       p="xs"
+      sx={{
+        overflowY: 'auto',
+      }}
       width={{
         // When viewport is larger than theme.breakpoints.sm, Navbar width will be 300
         sm: 300,
@@ -15,7 +23,10 @@ export default function Navbar() {
         base: 100,
       }}
     >
-      Application navbar
+      <Table />
+      <TableAttribute />
+      <DataTypes />
+      <AttributeConstraints />
     </MantineNavbar>
   )
 }
