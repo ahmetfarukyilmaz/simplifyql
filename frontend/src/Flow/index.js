@@ -8,9 +8,11 @@ import ReactFlow, {
   ReactFlowProvider,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { Navbar, Table } from 'components'
+import { Navbar } from 'components'
+import { Button } from '@mantine/core'
+import { TableNode } from 'nodes'
 
-const nodeTypes = { tableNode: Table }
+const nodeTypes = { TableNode: TableNode }
 
 let id = 0
 const getId = () => `node-${id++}`
@@ -76,6 +78,7 @@ function Flow() {
         <Background />
         <Controls />
       </ReactFlow>
+      <Button onClick={() => console.log(nodes)}>Log Nodes</Button>
       <Navbar />
     </ReactFlowProvider>
   )
