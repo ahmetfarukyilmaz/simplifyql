@@ -5,7 +5,6 @@ export default function App() {
   return (
     <AppShell
       padding="md"
-      navbar={<Navbar />}
       header={<Header />}
       styles={(theme) => ({
         main: {
