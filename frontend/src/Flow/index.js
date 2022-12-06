@@ -8,60 +8,50 @@ import ReactFlow, {
   ReactFlowProvider,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { Navbar } from 'components'
+import { Navbar, RightClickMenu } from 'components'
 import { Button } from '@mantine/core'
-import { TableNode } from 'nodes'
+import { TableNode, AttributeNode } from 'nodes'
+import useRightClickMenu from 'hooks/useRightClickMenu'
+import useStore from 'store/store'
+import shallow from 'zustand/shallow'
 
-const nodeTypes = { TableNode: TableNode }
+const nodeTypes = { TableNode: TableNode, AttributeNode: AttributeNode }
 
-let id = 0
-const getId = () => `node-${id++}`
+const selector = (state) => ({
+  nodes: state.nodes,
+  edges: state.edges,
+  onNodesChange: state.onNodesChange,
+  onEdgesChange: state.onEdgesChange,
+  onConnect: state.onConnect,
+})
 
 function Flow() {
+  const menu = useRightClickMenu()
   const reactFlowWrapper = useRef(null)
-  const [nodes, setNodes, onNodesChange] = useNodesState([])
-  const [edges, setEdges, onEdgesChange] = useEdgesState([])
-  const [reactFlowInstance, setReactFlowInstance] = useState(null)
-
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    []
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(
+    selector,
+    shallow
   )
+
+  const onNodeClick = (event) => {
+    event.preventDefault()
+    const node = nodes.find((n) => n.selected === true)
+    node.style = { border: '1px solid red' }
+    nodes.forEach((n) => {
+      if (n.id !== node.id) {
+        n.style = { border: 'none' }
+      }
+    })
+  }
+
   const onDragOver = useCallback((event) => {
     event.preventDefault()
     event.dataTransfer.dropEffect = 'move'
   }, [])
 
-  const onDrop = useCallback(
-    (event) => {
-      event.preventDefault()
-
-      const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect()
-      const type = event.dataTransfer.getData('application/reactflow')
-
-      // check if the dropped element is valid
-      if (typeof type === 'undefined' || !type) {
-        return
-      }
-
-      const position = reactFlowInstance.project({
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
-      })
-      const newNode = {
-        id: getId(),
-        type,
-        position,
-        data: { label: `${type} node` },
-      }
-
-      setNodes((nds) => nds.concat(newNode))
-    },
-    [reactFlowInstance]
-  )
-
   return (
     <ReactFlowProvider>
+      <RightClickMenu menu={menu} />
       <ReactFlow
         ref={reactFlowWrapper}
         nodes={nodes}
@@ -69,17 +59,21 @@ function Flow() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        onInit={setReactFlowInstance}
-        onDrop={onDrop}
         onDragOver={onDragOver}
         nodeTypes={nodeTypes}
-        fitView
+        onNodeClick={onNodeClick}
+        proOptions={{ hideAttribution: true }}
       >
         <Background />
         <Controls />
       </ReactFlow>
-      <Button onClick={() => console.log(nodes)}>Log Nodes</Button>
-      <Navbar />
+      <Button
+        sx={{ position: 'absolute', top: 100, right: 20 }}
+        onClick={() => console.log(nodes)}
+      >
+        Log Nodes
+      </Button>
+      {/* <Navbar /> */}
     </ReactFlowProvider>
   )
 }

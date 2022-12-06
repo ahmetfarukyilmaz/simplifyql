@@ -13,11 +13,6 @@ import { useForm } from '@mantine/form'
 import { Link } from 'react-router-dom'
 import request from 'utils/request'
 
-interface IRegister {
-  email: string
-  password: string
-}
-
 const useStyles = createStyles((theme) => ({
   wrapper: {
     minHeight: 900,
@@ -53,12 +48,12 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export function RegisterPage() {
+export function LoginPage() {
   if (localStorage.getItem('token')) {
     window.location.href = '/'
   }
-
   const { classes } = useStyles()
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -72,13 +67,13 @@ export function RegisterPage() {
     },
   })
 
-  const onSubmit = async (values: IRegister) => {
+  const onSubmit = async (values) => {
     try {
-      const response = await request.post('/users/register', values)
+      const response = await request.post('/users/login', values)
       const token = response.data.auth_token
       localStorage.setItem('token', token)
       window.location.href = '/'
-    } catch (error: any) {
+    } catch (error) {
       showNotification({
         title: 'Error',
         message: error.response.data.detail || 'Something went wrong',
@@ -97,8 +92,9 @@ export function RegisterPage() {
           mt="md"
           mb={50}
         >
-          Register to SimplifyQL
+          Welcome back to SimplifyQL
         </Title>
+
         <form onSubmit={form.onSubmit(onSubmit)}>
           <TextInput
             required
@@ -132,9 +128,9 @@ export function RegisterPage() {
         </form>
 
         <Text align="center" mt="md">
-          Already have an account?{' '}
-          <Anchor component={Link} to="/login">
-            Login
+          Don&apos;t have an account?{' '}
+          <Anchor component={Link} to="/register">
+            Register
           </Anchor>
         </Text>
       </Paper>

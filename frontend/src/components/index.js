@@ -4,7 +4,7 @@ import Table from './ErDiagram/Table'
 import TableAttribute from './ErDiagram/TableAttribute'
 import DataTypes from './ErDiagram/DataTypes'
 import AttributeConstraints from './ErDiagram/AttributeConstraints'
-
+import RightClickMenu from './RightClickMenu'
 export {
   Navbar,
   Header,
@@ -12,4 +12,5 @@ export {
   TableAttribute,
   DataTypes,
   AttributeConstraints,
+  RightClickMenu,
 }
