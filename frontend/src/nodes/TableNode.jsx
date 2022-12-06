@@ -14,7 +14,7 @@ const selector = (state) => ({
 function TableNode(props) {
   const { nodes, hideNodes } = useStore(selector, shallow)
   const [childNodes, setChildNodes] = useState([])
-  const [stringValue, setStringValue] = useInputState(props.data.name || '')
+  const [tableName, setTableName] = useInputState(props.data.name || '')
   const [opened, setOpened] = useState(true)
 
   const handleCollapse = () => {
@@ -22,9 +22,21 @@ function TableNode(props) {
     hideNodes(childNodes)
   }
 
+  const onNodeClick = (event) => {
+    event.preventDefault()
+    nodes.forEach((n) => {
+      n.style = { border: 'none' }
+      n.data.selected = false
+    })
+
+    const node = nodes.find((n) => n.id === props.id)
+    node.style = { border: '1px solid red' }
+    node.data.selected = true
+  }
+
   // on input change, send the new value to the react flow instance
   const onInputChange = (event) => {
-    setStringValue(event.target.value)
+    setTableName(event.target.value)
     props.data.name = event.target.value
   }
 
@@ -36,6 +48,7 @@ function TableNode(props) {
   return (
     <>
       <Paper
+        onClick={onNodeClick}
         shadow="xs"
         p="lg"
         radius="lg"
@@ -51,7 +64,7 @@ function TableNode(props) {
         }}
       >
         <TextInput
-          value={stringValue}
+          value={tableName}
           onChange={onInputChange}
           placeholder="Table Name"
           required
