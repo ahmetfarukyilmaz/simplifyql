@@ -47,8 +47,7 @@ def get_sql(data: list[NodeSchema]) -> list[TableSchema]:
     # parse the data
     nodes = []
     for node in data:
-        node_test = NodeSchema.parse_obj(node)
-        nodes.append(node_test)
+        nodes.append(NodeSchema(**node))
 
     tables, attributes = identify_nodes(nodes)
     tables = add_attributes_to_tables(tables, attributes)
