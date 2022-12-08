@@ -3,16 +3,16 @@ from uuid import UUID
 from ninja import Schema
 
 
-class Register(Schema):
+class RegisterSchema(Schema):
     email: str
     password: str
 
 
-class Error(Schema):
+class ErrorSchema(Schema):
     detail: str
 
 
-class User(Schema):
+class UserSchema(Schema):
     id: int
     email: str
     auth_token: UUID
