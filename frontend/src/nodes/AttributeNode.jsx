@@ -36,7 +36,9 @@ function AttributeNode(props) {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
+        paddingLeft: '10px',
+        paddingRight: '10px',
       }}
       shadow="xs"
       radius="lg"
@@ -50,11 +52,11 @@ function AttributeNode(props) {
         variant="unstyled"
       />
       <IconArrowAutofitDown />
+      {/* <IconArrowAutofitDown />
       <IconArrowAutofitDown />
       <IconArrowAutofitDown />
       <IconArrowAutofitDown />
-      <IconArrowAutofitDown />
-      <IconArrowAutofitDown />
+      <IconArrowAutofitDown /> */}
     </Paper>
   )
 }

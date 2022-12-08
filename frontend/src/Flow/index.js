@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useRef, useCallback } from 'react'
 import ReactFlow, {
   addEdge,
   useNodesState,
@@ -8,7 +8,6 @@ import ReactFlow, {
   ReactFlowProvider,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { Navbar, RightClickMenu } from 'components'
 import { Button } from '@mantine/core'
 import { TableNode, AttributeNode } from 'nodes'
 import useStore from 'store/store'
@@ -48,11 +47,24 @@ function Flow() {
     })
   }
 
+  const handleClick = (e) => {
+    if (e.target.className === 'react-flow__pane') {
+      const newNodes = nodes.map((node) => {
+        node.data.selected = false
+        node.style = { border: 'none' }
+
+        return node
+      })
+      onNodesChange(newNodes)
+    }
+  }
+
   return (
-    <ReactFlowProvider>
+    <ReactFlowProvider onClick={handleClick}>
       <ContextMenuReact />
 
       <ReactFlow
+        onClick={handleClick}
         onContextMenu={displayMenu}
         ref={reactFlowWrapper}
         nodes={nodes}
