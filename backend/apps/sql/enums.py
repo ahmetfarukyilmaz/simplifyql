@@ -1,15 +1,16 @@
 from enum import Enum
 
 
-class NodeType(Enum):
+class NodeType(str, Enum):
     """Enum for node types"""
 
     TABLE = "table"
     ATTRIBUTE = "attribute"
 
 
-class AttributeType(Enum):
-    # postgres types
+class AttributeType(str, Enum):
+    """Enum for postgres attribute types (aka column types)"""
+
     INTEGER = "integer"
     BIGINT = "bigint"
     SMALLINT = "smallint"

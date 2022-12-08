@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # Local apps
     "users",
+    "sql",
 ]
 
 MIDDLEWARE = [

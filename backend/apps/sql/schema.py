@@ -7,21 +7,30 @@ class AttributeConstraintsSchema(Schema):
     nullable: bool = False
     unique: bool = False
     primary_key: bool = False
-    autoincrement: bool = False
+    auto_increment: bool = False
 
 
-class NodeDataSchema(Schema):
+class AttributeSchema(Schema):
+    id: str
     name: str
-    constraints: AttributeConstraintsSchema = None
+    type: AttributeType  # varchar, integer, etc.
+    length: int = None  # varchar(255), integer(11), etc.
+    parent_node: str
+    constraints: AttributeConstraintsSchema = None  # nullable, unique, etc.
+
+
+class TableSchema(Schema):
+    id: str
+    name: str
+    attributes: list[AttributeSchema] = []
 
 
 class NodeSchema(Schema):
+    """
+    Schema that comes from the frontend
+    """
+
     id: str
     type: NodeType
     parentNode: str = None
-    data: NodeDataSchema
-
-
-class AttributeSchema(NodeSchema):
-    type: AttributeType  # such as varchar, integer, etc.
-    constraints: AttributeConstraintsSchema = None  # such as nullable, unique, etc.
+    data: dict = None
