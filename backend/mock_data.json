@@ -33,5 +33,32 @@
                 "unique": true
             }
         }
+    },
+    {
+        "id": "node-4",
+        "type": "attribute",
+        "parentNode": "node-1",
+        "data": {
+            "name": "email",
+            "type": "varchar",
+            "length": 255,
+            "constraints": {
+                "nullable": true,
+                "unique": true
+            }
+        }
+    },
+    {
+        "id": "node-5",
+        "type": "attribute",
+        "parentNode": "node-1",
+        "data": {
+            "name": "is_active",
+            "type": "boolean",
+            "constraints": {
+                "nullable": false,
+                "default": true
+            }
+        }
     }
 ]

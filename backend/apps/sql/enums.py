@@ -28,3 +28,4 @@ class AttributeType(str, Enum):
     CHAR = "char"
     TEXT = "text"
     TIMESTAMP = "timestamp"
+    BOOLEAN = "boolean"

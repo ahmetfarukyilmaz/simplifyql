@@ -14,7 +14,7 @@ class AttributeSchema(Schema):
     id: str
     name: str
     type: AttributeType  # varchar, integer, etc.
-    length: int = None  # varchar(255), integer(11), etc.
+    length: str = ""  # varchar(255), integer(11), etc.
     parent_node: str
     constraints: AttributeConstraintsSchema = None  # nullable, unique, etc.
 

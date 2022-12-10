@@ -8,6 +8,16 @@ const selector = (state) => ({
   nodes: state.nodes,
 })
 
+const paperStyles = {
+  width: '100%',
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  paddingLeft: '10px',
+  paddingRight: '10px',
+}
+
 function AttributeNode(props) {
   const [attributeName, setAttributeName] = useInputState(props.data.name || '')
   const { nodes } = useStore(selector, shallow)
@@ -31,15 +41,7 @@ function AttributeNode(props) {
   return (
     <Paper
       onClick={onNodeClick}
-      sx={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingLeft: '10px',
-        paddingRight: '10px',
-      }}
+      sx={paperStyles}
       shadow="xs"
       radius="lg"
       bg="gray"
