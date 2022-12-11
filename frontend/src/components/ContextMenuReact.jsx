@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Menu, Item } from 'react-contexify'
 import shallow from 'zustand/shallow'
-
 import useStore from 'store/store'
 import 'react-contexify/dist/ReactContexify.css'
 
@@ -30,14 +29,12 @@ export default function ContextMenuReact() {
   }
 
   const handleCreateAttribute = () => {
-    const selectedNode = nodes.find((n) => n.data.selected === true)
     const newNode = {
       id: getId(),
       type: 'AttributeNode',
-      parentNode: selectedNode.id,
+      parentNode: rightClickNode.id,
       extent: 'parent',
       position: { x: 0, y: 0 },
-      hidden: true,
       draggable: false,
       data: { label: 'Attribute' },
     }
@@ -74,8 +71,6 @@ export default function ContextMenuReact() {
       Create Attribute Constraint
     </Item>
   )
-
-  // if rightClickNode is null, return only create table item
 
   return (
     <div>

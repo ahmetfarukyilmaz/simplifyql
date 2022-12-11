@@ -41,6 +41,16 @@ const useStore = create((set, get) => ({
       }),
     })
   },
+  showNodes: (nodes) => {
+    set({
+      nodes: get().nodes.map((n) => {
+        if (nodes.includes(n)) {
+          n.hidden = false
+        }
+        return n
+      }),
+    })
+  },
 
   onNodesChange: (changes) => {
     set({

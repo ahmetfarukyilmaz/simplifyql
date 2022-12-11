@@ -1,25 +1,31 @@
-import { Paper, TextInput, Collapse, SimpleGrid } from '@mantine/core'
+import {
+  Paper,
+  TextInput,
+  Collapse,
+  SimpleGrid,
+  ActionIcon,
+} from '@mantine/core'
 import { useInputState } from '@mantine/hooks'
 import { useEffect, useState } from 'react'
 import useStore from 'store/store'
 import shallow from 'zustand/shallow'
-import { ActionIcon } from '@mantine/core'
 import { IconArrowAutofitDown } from '@tabler/icons'
 import { AttributeNode } from 'nodes'
+import { UpdateAttributeNodePositions } from 'utils/calculateNodePosition'
 const selector = (state) => ({
   nodes: state.nodes,
   hideNodes: state.hideNodes,
+  showNodes: state.showNodes,
 })
 
 function TableNode(props) {
-  const { nodes, hideNodes } = useStore(selector, shallow)
+  const { nodes, hideNodes, showNodes } = useStore(selector, shallow)
   const [childNodes, setChildNodes] = useState([])
   const [tableName, setTableName] = useInputState(props.data.name || '')
   const [opened, setOpened] = useState(true)
 
   const handleCollapse = () => {
     setOpened(!opened)
-    hideNodes(childNodes)
   }
 
   const onNodeClick = (event) => {
@@ -34,7 +40,6 @@ function TableNode(props) {
     node.data.selected = true
   }
 
-  // on input change, send the new value to the react flow instance
   const onInputChange = (event) => {
     setTableName(event.target.value)
     props.data.name = event.target.value
@@ -43,7 +48,15 @@ function TableNode(props) {
   useEffect(() => {
     const childNodes = nodes.filter((n) => n.parentNode === props.id)
     setChildNodes(childNodes)
-  }, [nodes])
+    const parentNode = nodes.find((n) => n.id === props.id)
+    // if TableNode itself is deleted, do not update attribute positions, it will cause error
+    if (parentNode) UpdateAttributeNodePositions(nodes, parentNode)
+  }, [nodes, props.id])
+
+  useEffect(() => {
+    if (opened) showNodes(childNodes)
+    else hideNodes(childNodes)
+  }, [opened, childNodes, hideNodes, showNodes])
 
   return (
     <>
@@ -102,13 +115,20 @@ function TableNode(props) {
             cols={1}
           >
             {childNodes.map((node) => (
-              <AttributeNode
+              <div
                 key={node.id}
-                data={node.data}
-                name={node.data.name}
-                id={node.id}
-                hideNodes={hideNodes}
-              />
+                style={{
+                  visibility: 'hidden',
+                }}
+              >
+                <AttributeNode
+                  key={node.id}
+                  data={node.data}
+                  name={node.data.name}
+                  id={node.id}
+                  hideNodes={hideNodes}
+                />
+              </div>
             ))}
           </SimpleGrid>
         </Paper>

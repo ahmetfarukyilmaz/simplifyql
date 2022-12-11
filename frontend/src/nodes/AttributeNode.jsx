@@ -9,7 +9,8 @@ const selector = (state) => ({
 })
 
 const paperStyles = {
-  width: '100%',
+  width: '450px',
+  height: '45px',
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
