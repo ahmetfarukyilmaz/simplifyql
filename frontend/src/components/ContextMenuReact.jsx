@@ -79,6 +79,17 @@ export default function ContextMenuReact() {
     addNode(newNode)
   }
 
+  const checkmark = (constraint) => {
+    if (
+      rightClickNode &&
+      rightClickNode.type === 'AttributeNode' &&
+      rightClickNode.data.constraints[constraint]
+    ) {
+      return '✓'
+    }
+    return ''
+  }
+
   useEffect(() => {
     // change selected node
     const selectedNode = nodes.find((n) => n.data.selected === true)
@@ -97,16 +108,16 @@ export default function ContextMenuReact() {
   const createAttributeConstraintItem = (
     <Submenu label="Attribute Constraints">
       <Item onClick={() => handleCreateAttributeConstraint('nullable')}>
-        NULLABLE
+        NULLABLE {checkmark('nullable')}
       </Item>
       <Item onClick={() => handleCreateAttributeConstraint('unique')}>
-        UNIQUE
+        UNIQUE {checkmark('unique')}
       </Item>
       <Item onClick={() => handleCreateAttributeConstraint('auto_increment')}>
-        AUTO INCREMENT
+        AUTO INCREMENT {checkmark('auto_increment')}
       </Item>
       <Item onClick={() => handleCreateAttributeConstraint('primary_key')}>
-        PRIMARY KEY
+        PRIMARY KEY {checkmark('primary_key')}
       </Item>
     </Submenu>
   )
