@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Menu, Item } from 'react-contexify'
+import { Menu, Item, Submenu } from 'react-contexify'
 import shallow from 'zustand/shallow'
 import useStore from 'store/store'
 import 'react-contexify/dist/ReactContexify.css'
@@ -36,23 +36,46 @@ export default function ContextMenuReact() {
       extent: 'parent',
       position: { x: 0, y: 0 },
       draggable: false,
-      data: { label: 'Attribute' },
+      data: {
+        label: 'Attribute',
+        constraints: {
+          primary_key: false,
+          unique: false,
+          nullable: false,
+          auto_increment: false,
+        },
+      },
     }
     addNode(newNode)
   }
 
-  const handleCreateAttributeConstraint = () => {
-    const selectedNode = nodes.find((n) => n.data.selected === true)
+  const handleCreateAttributeConstraint = (constraint) => {
+    // check if attribute constraint already true in constraints object
+    if (rightClickNode.data.constraints[constraint]) {
+      // make constraint false and remove the node
+      rightClickNode.data.constraints[constraint] = false
+      const nodeToRemove = nodes.find(
+        (n) => n.parentNode === rightClickNode.id && n.data.name === constraint
+      )
+      const index = nodes.indexOf(nodeToRemove)
+      nodes.splice(index, 1)
+      return
+    }
+
     const newNode = {
       id: getId(),
       type: 'AttributeConstraintNode',
-      parentNode: selectedNode.id,
+      parentNode: rightClickNode.id,
       extent: 'parent',
       position: { x: 0, y: 0 },
-      hidden: true,
-      draggable: false,
-      data: { label: 'Attribute Constraint' },
+      draggable: true,
+      data: {
+        label: 'Attribute Constraint',
+        name: constraint,
+      },
     }
+    rightClickNode.data.constraints[constraint] = true
+
     addNode(newNode)
   }
 
@@ -62,14 +85,30 @@ export default function ContextMenuReact() {
     setRightClickNode(selectedNode)
   }, [nodes])
 
+  // right click on canvas
   const createTableItem = <Item onClick={handleCreateTable}>Create Table</Item>
+
+  // right click on TableNode
   const createAttributeItem = (
     <Item onClick={handleCreateAttribute}>Create Attribute</Item>
   )
+
+  // right click on AttributeNode
   const createAttributeConstraintItem = (
-    <Item onClick={handleCreateAttributeConstraint}>
-      Create Attribute Constraint
-    </Item>
+    <Submenu label="Attribute Constraints">
+      <Item onClick={() => handleCreateAttributeConstraint('nullable')}>
+        NULLABLE
+      </Item>
+      <Item onClick={() => handleCreateAttributeConstraint('unique')}>
+        UNIQUE
+      </Item>
+      <Item onClick={() => handleCreateAttributeConstraint('auto_increment')}>
+        AUTO INCREMENT
+      </Item>
+      <Item onClick={() => handleCreateAttributeConstraint('primary_key')}>
+        PRIMARY KEY
+      </Item>
+    </Submenu>
   )
 
   return (

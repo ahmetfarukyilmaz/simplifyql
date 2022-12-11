@@ -1,4 +1,4 @@
 import TableNode from './TableNode'
 import AttributeNode from './AttributeNode'
-
-export { TableNode, AttributeNode }
+import AttributeConstraintNode from './AttributeConstraintNode'
+export { TableNode, AttributeNode, AttributeConstraintNode }

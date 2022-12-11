@@ -54,12 +54,6 @@ function AttributeNode(props) {
         required
         variant="unstyled"
       />
-      <IconArrowAutofitDown />
-      {/* <IconArrowAutofitDown />
-      <IconArrowAutofitDown />
-      <IconArrowAutofitDown />
-      <IconArrowAutofitDown />
-      <IconArrowAutofitDown /> */}
     </Paper>
   )
 }

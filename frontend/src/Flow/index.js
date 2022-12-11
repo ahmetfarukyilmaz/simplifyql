@@ -9,12 +9,16 @@ import ReactFlow, {
 } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { Button } from '@mantine/core'
-import { TableNode, AttributeNode } from 'nodes'
+import { TableNode, AttributeNode, AttributeConstraintNode } from 'nodes'
 import useStore from 'store/store'
 import shallow from 'zustand/shallow'
 import { useContextMenu } from 'react-contexify'
 import ContextMenuReact from 'components/ContextMenuReact'
-const nodeTypes = { TableNode: TableNode, AttributeNode: AttributeNode }
+const nodeTypes = {
+  TableNode: TableNode,
+  AttributeNode: AttributeNode,
+  AttributeConstraintNode: AttributeConstraintNode,
+}
 
 const selector = (state) => ({
   nodes: state.nodes,
