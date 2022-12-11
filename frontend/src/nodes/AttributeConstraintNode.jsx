@@ -15,7 +15,7 @@ const AttributeConstraintNode = ({ data }) => {
       case 'nullable':
         setColor('green')
         break
-      case 'auto_increment':
+      case 'index':
         setColor('yellow')
         break
       default:

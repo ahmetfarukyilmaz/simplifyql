@@ -7,7 +7,7 @@ class AttributeConstraintsSchema(Schema):
     nullable: bool = False
     unique: bool = False
     primary_key: bool = False
-    auto_increment: bool = False
+    index: bool = False
 
 
 class AttributeSchema(Schema):

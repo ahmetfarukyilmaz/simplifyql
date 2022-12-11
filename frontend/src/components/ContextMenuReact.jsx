@@ -42,7 +42,7 @@ export default function ContextMenuReact() {
           primary_key: false,
           unique: false,
           nullable: false,
-          auto_increment: false,
+          index: false,
         },
       },
     }
@@ -113,8 +113,8 @@ export default function ContextMenuReact() {
       <Item onClick={() => handleCreateAttributeConstraint('unique')}>
         UNIQUE {checkmark('unique')}
       </Item>
-      <Item onClick={() => handleCreateAttributeConstraint('auto_increment')}>
-        AUTO INCREMENT {checkmark('auto_increment')}
+      <Item onClick={() => handleCreateAttributeConstraint('index')}>
+        INDEX {checkmark('index')}
       </Item>
       <Item onClick={() => handleCreateAttributeConstraint('primary_key')}>
         PRIMARY KEY {checkmark('primary_key')}

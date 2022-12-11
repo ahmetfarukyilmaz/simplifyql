@@ -15,8 +15,7 @@
             "type": "integer",
             "length": 11,
             "constraints": {
-                "primary_key": true,
-                "auto_increment": true
+                "primary_key": true
             }
         }
     },
@@ -44,7 +43,8 @@
             "length": 255,
             "constraints": {
                 "nullable": true,
-                "unique": true
+                "unique": true,
+                "index": true
             }
         }
     },

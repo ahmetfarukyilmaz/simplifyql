@@ -55,42 +55,16 @@ def get_sql(data: list[NodeSchema]) -> list[TableSchema]:
     return tables
 
 
-def generate_sql_code(tables: list[TableSchema]) -> str:
-    """Generate SQL code from tables and attributes"""
-
-    sql_code = ""
-
-    for table in tables:
-        sql_code += f"CREATE TABLE {table.name} ("
-        for attribute in table.attributes:
-            sql_code += f"{attribute.name} {attribute.type}"
-            if attribute.length:
-                sql_code += f"({attribute.length})"
-            if attribute.constraints:
-                if attribute.constraints.nullable:
-                    sql_code += " NULL"
-                if attribute.constraints.unique:
-                    sql_code += " UNIQUE"
-                if attribute.constraints.primary_key:
-                    sql_code += " PRIMARY KEY"
-                if attribute.constraints.auto_increment:
-                    sql_code += " AUTO_INCREMENT"
-            sql_code += ","
-
-        sql_code = sql_code[:-1] + ");"
-
-    return sql_code
-
-
-def generate_sql_code_v2(tables):
+def generate_sql_code(tables):
     # Generate the SQL code for the tables
     sql_code = ""
     for table in tables:
-        # Start the CREATE TABLE statement
-        sql_code += "CREATE TABLE {} (\n".format(table.name)
+        # Start the CREATE TABLE statement, but use double quotes for the table name
+        sql_code += 'CREATE TABLE "{}" (\n'.format(table.name)
 
         # Generate the column definitions for the table
         columns = []
+        indexes = []
         for attribute in table.attributes:
             # Get the column name and data type
             column_name = attribute.name
@@ -119,12 +93,15 @@ def generate_sql_code_v2(tables):
                 if attribute.constraints.unique:
                     column += " UNIQUE"
 
-                # Check if the column is auto-incrementing
-                if attribute.constraints.auto_increment:
-                    column += " AUTO_INCREMENT"
-
             # Add the column to the list of columns
             columns.append(column)
+
+            # Check if the column is indexed
+            if attribute.constraints.index:
+                index_name = "{}_{}_index".format(table.name, column_name)
+                # use double quotes for the table name
+                index = 'CREATE INDEX "{}" ON "{}" ("{}");'.format(index_name, table.name, column_name)
+                indexes.append(index)
 
         # Concatenate the list of columns with a comma and a newline
         column_defs = ",\n".join(columns)
@@ -133,6 +110,9 @@ def generate_sql_code_v2(tables):
         sql_code += "{}\n".format(column_defs)
 
         # End the CREATE TABLE statement
-        sql_code += ");"
+        sql_code += ");\n\n"
+
+        # Add the indexes to the SQL code
+        sql_code += "".join(indexes)
 
     return sql_code
