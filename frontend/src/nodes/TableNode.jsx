@@ -25,12 +25,24 @@ function TableNode(props) {
   const [tableName, setTableName] = useInputState(props.data.name || '')
   const [opened, setOpened] = useState(true)
 
+  const findChildNodesRecursive = (nodeId) => {
+    const childNodes = nodes.filter((n) => n.parentNode === nodeId)
+    let result = []
+    for (const element of childNodes) {
+      result.push(element)
+      result = result.concat(findChildNodesRecursive(element.id))
+    }
+    return result
+  }
+
   const handleCollapse = () => {
+    const recursiveChildNodes = findChildNodesRecursive(props.id)
+
     if (opened) {
-      hideNodes(childNodes)
+      hideNodes(recursiveChildNodes)
       setOpened(false)
     } else {
-      showNodes(childNodes)
+      showNodes(recursiveChildNodes)
       setOpened(true)
     }
   }

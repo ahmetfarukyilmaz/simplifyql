@@ -52,7 +52,7 @@ function AttributeNode(props) {
         placeholder="Attribute Name"
         required
         variant="unstyled"
-        sx={{ width: ATTRIBUTE_TEXT_WIDTH, border: '1px solid yellow' }}
+        sx={{ width: ATTRIBUTE_TEXT_WIDTH }}
       />
     </Paper>
   )
