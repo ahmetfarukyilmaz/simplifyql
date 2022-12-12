@@ -1,16 +1,23 @@
+import { useState, useEffect } from 'react'
 import useStore from 'store/store'
 import shallow from 'zustand/shallow'
 import { Paper, TextInput } from '@mantine/core'
 import { useInputState } from '@mantine/hooks'
-import { IconArrowAutofitDown } from '@tabler/icons'
-
+import {
+  ATTRIBUTE_HEIGHT,
+  ATTRIBUTE_WIDTH,
+  ATTRIBUTE_TEXT_WIDTH,
+} from 'constants'
+import { UpdateAttributeConstraintNodePositions } from 'utils/calculateNodePosition'
 const selector = (state) => ({
   nodes: state.nodes,
+  showNodes: state.showNodes,
+  hideNodes: state.hideNodes,
 })
 
 const paperStyles = {
-  width: '450px',
-  height: '45px',
+  width: ATTRIBUTE_WIDTH,
+  height: ATTRIBUTE_HEIGHT,
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -21,38 +28,31 @@ const paperStyles = {
 
 function AttributeNode(props) {
   const [attributeName, setAttributeName] = useInputState(props.data.name || '')
-  const { nodes } = useStore(selector, shallow)
-
-  const onNodeClick = (event) => {
-    event.preventDefault()
-    nodes.forEach((n) => {
-      n.style = { border: 'none' }
-      n.data.selected = false
-    })
-
-    const node = nodes.find((n) => n.id === props.id)
-    node.style = { border: '1px solid red' }
-    node.data.selected = true
-  }
+  const [childNodes, setChildNodes] = useState([])
+  const { nodes, showNodes, hideNodes } = useStore(selector, shallow)
 
   const onInputChange = (event) => {
     setAttributeName(event.target.value)
     props.data.name = event.target.value
   }
+
+  useEffect(() => {
+    const childNodes = nodes.filter((n) => n.parentNode === props.id)
+    setChildNodes(childNodes)
+    const parentNode = nodes.find((n) => n.id === props.id)
+    // if node itself is deleted, do not update attribute positions, it will cause error
+    if (parentNode) UpdateAttributeConstraintNodePositions(nodes, parentNode)
+  }, [nodes])
+
   return (
-    <Paper
-      onClick={onNodeClick}
-      sx={paperStyles}
-      shadow="xs"
-      radius="lg"
-      bg="gray"
-    >
+    <Paper sx={paperStyles} shadow="xs" radius="lg" bg="gray">
       <TextInput
         value={attributeName}
         onChange={onInputChange}
         placeholder="Attribute Name"
         required
         variant="unstyled"
+        sx={{ width: ATTRIBUTE_TEXT_WIDTH, border: '1px solid yellow' }}
       />
     </Paper>
   )

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Badge } from '@mantine/core'
-
+import { ATTRIBUTE_CONSTRAINT_HEIGHT } from 'constants'
 const AttributeConstraintNode = ({ data }) => {
   const [color, setColor] = useState('red')
 
@@ -28,7 +28,16 @@ const AttributeConstraintNode = ({ data }) => {
   }, [])
 
   return (
-    <Badge color={color} variant="filled" size="xs">
+    <Badge
+      sx={{
+        marginTop: '10px',
+        marginBottom: '10px',
+        height: ATTRIBUTE_CONSTRAINT_HEIGHT,
+      }}
+      color={color}
+      variant="filled"
+      size="xs"
+    >
       {data.name}
     </Badge>
   )

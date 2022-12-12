@@ -10,10 +10,11 @@ const selector = (state) => ({
   addNode: state.addNode,
   getId: state.getId,
   nodes: state.nodes,
+  onNodesChange: state.onNodesChange,
 })
 
 export default function ContextMenuReact() {
-  const { addNode, getId, nodes } = useStore(selector, shallow)
+  const { addNode, getId, nodes, onNodesChange } = useStore(selector, shallow)
   const [rightClickNode, setRightClickNode] = useState(null)
 
   function handleCreateTable(e) {
@@ -24,6 +25,7 @@ export default function ContextMenuReact() {
       type: 'TableNode',
       position: { x, y },
       data: { label: 'Table' },
+      hidden: false,
     }
     addNode(newNode)
   }
@@ -36,6 +38,7 @@ export default function ContextMenuReact() {
       extent: 'parent',
       position: { x: 0, y: 0 },
       draggable: false,
+      hidden: false,
       data: {
         label: 'Attribute',
         constraints: {
@@ -59,24 +62,26 @@ export default function ContextMenuReact() {
       )
       const index = nodes.indexOf(nodeToRemove)
       nodes.splice(index, 1)
-      return
-    }
+      onNodesChange(nodes)
+    } else {
+      const newNode = {
+        id: getId(),
+        type: 'AttributeConstraintNode',
+        parentNode: rightClickNode.id,
+        extent: 'parent',
+        position: { x: 0, y: 0 },
+        draggable: false,
+        hidden: false,
+        data: {
+          label: 'Attribute Constraint',
+          name: constraint,
+        },
+      }
 
-    const newNode = {
-      id: getId(),
-      type: 'AttributeConstraintNode',
-      parentNode: rightClickNode.id,
-      extent: 'parent',
-      position: { x: 0, y: 0 },
-      draggable: true,
-      data: {
-        label: 'Attribute Constraint',
-        name: constraint,
-      },
-    }
-    rightClickNode.data.constraints[constraint] = true
+      rightClickNode.data.constraints[constraint] = true
 
-    addNode(newNode)
+      addNode(newNode)
+    }
   }
 
   const checkmark = (constraint) => {
@@ -92,7 +97,7 @@ export default function ContextMenuReact() {
 
   useEffect(() => {
     // change selected node
-    const selectedNode = nodes.find((n) => n.data.selected === true)
+    const selectedNode = nodes.find((n) => n.selected)
     setRightClickNode(selectedNode)
   }, [nodes])
 

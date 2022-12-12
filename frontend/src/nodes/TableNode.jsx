@@ -12,6 +12,7 @@ import shallow from 'zustand/shallow'
 import { IconArrowAutofitDown } from '@tabler/icons'
 import { AttributeNode } from 'nodes'
 import { UpdateAttributeNodePositions } from 'utils/calculateNodePosition'
+import { TABLE_HEIGHT, TABLE_WIDTH, TABLE_CONTENT_MIN_HEIGHT } from 'constants'
 const selector = (state) => ({
   nodes: state.nodes,
   hideNodes: state.hideNodes,
@@ -25,19 +26,13 @@ function TableNode(props) {
   const [opened, setOpened] = useState(true)
 
   const handleCollapse = () => {
-    setOpened(!opened)
-  }
-
-  const onNodeClick = (event) => {
-    event.preventDefault()
-    nodes.forEach((n) => {
-      n.style = { border: 'none' }
-      n.data.selected = false
-    })
-
-    const node = nodes.find((n) => n.id === props.id)
-    node.style = { border: '1px solid red' }
-    node.data.selected = true
+    if (opened) {
+      hideNodes(childNodes)
+      setOpened(false)
+    } else {
+      showNodes(childNodes)
+      setOpened(true)
+    }
   }
 
   const onInputChange = (event) => {
@@ -53,15 +48,9 @@ function TableNode(props) {
     if (parentNode) UpdateAttributeNodePositions(nodes, parentNode)
   }, [nodes, props.id])
 
-  useEffect(() => {
-    if (opened) showNodes(childNodes)
-    else hideNodes(childNodes)
-  }, [opened, childNodes, hideNodes, showNodes])
-
   return (
     <>
       <Paper
-        onClick={onNodeClick}
         shadow="xs"
         p="lg"
         radius="lg"
@@ -69,8 +58,8 @@ function TableNode(props) {
         sx={{
           borderBottomLeftRadius: opened ? 0 : 'lg',
           borderBottomRightRadius: opened ? 0 : 'lg',
-          height: 60,
-          width: 500,
+          height: TABLE_HEIGHT,
+          width: TABLE_WIDTH,
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
@@ -101,7 +90,7 @@ function TableNode(props) {
           sx={{
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,
-            minHeight: 100,
+            minHeight: TABLE_CONTENT_MIN_HEIGHT,
           }}
           p="lg"
           withBorder

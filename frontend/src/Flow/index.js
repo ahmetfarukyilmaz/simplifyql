@@ -1,12 +1,5 @@
 import { useRef, useCallback } from 'react'
-import ReactFlow, {
-  addEdge,
-  useNodesState,
-  useEdgesState,
-  Background,
-  Controls,
-  ReactFlowProvider,
-} from 'reactflow'
+import ReactFlow, { Background, Controls, ReactFlowProvider } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { Button } from '@mantine/core'
 import { TableNode, AttributeNode, AttributeConstraintNode } from 'nodes'
@@ -14,6 +7,7 @@ import useStore from 'store/store'
 import shallow from 'zustand/shallow'
 import { useContextMenu } from 'react-contexify'
 import ContextMenuReact from 'components/ContextMenuReact'
+
 const nodeTypes = {
   TableNode: TableNode,
   AttributeNode: AttributeNode,
@@ -89,7 +83,6 @@ function Flow() {
       >
         Log Nodes
       </Button>
-      {/* <Navbar /> */}
     </ReactFlowProvider>
   )
 }

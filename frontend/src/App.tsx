@@ -1,5 +1,5 @@
 import { AppShell } from '@mantine/core'
-import { Navbar, Header } from 'components'
+import { Header } from 'components'
 import Flow from 'Flow'
 export default function App() {
   return (
