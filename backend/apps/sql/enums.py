@@ -4,8 +4,10 @@ from enum import Enum
 class NodeType(str, Enum):
     """Enum for node types"""
 
-    TABLE = "table"
-    ATTRIBUTE = "attribute"
+    TABLE = "TableNode"
+    ATTRIBUTE = "AttributeNode"
+    ATTRIBUTE_CONSTRAINT = "AttributeConstraintNode"
+    ATTRIBUTE_TYPE = "AttributeTypeNode"
 
 
 class AttributeType(str, Enum):

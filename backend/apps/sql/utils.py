@@ -44,12 +44,8 @@ def add_attributes_to_tables(tables: list[TableSchema], attributes: list[Attribu
 
 
 def get_sql(data: list[NodeSchema]) -> list[TableSchema]:
-    # parse the data
-    nodes = []
-    for node in data:
-        nodes.append(NodeSchema(**node))
 
-    tables, attributes = identify_nodes(nodes)
+    tables, attributes = identify_nodes(data)
     tables = add_attributes_to_tables(tables, attributes)
 
     return tables
@@ -100,7 +96,7 @@ def generate_sql_code(tables):
             if attribute.constraints.index:
                 index_name = "{}_{}_index".format(table.name, column_name)
                 # use double quotes for the table name
-                index = 'CREATE INDEX "{}" ON "{}" ("{}");'.format(index_name, table.name, column_name)
+                index = 'CREATE INDEX "{}" ON "{}" ("{}");\n\n'.format(index_name, table.name, column_name)
                 indexes.append(index)
 
         # Concatenate the list of columns with a comma and a newline

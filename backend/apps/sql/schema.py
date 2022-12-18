@@ -13,7 +13,7 @@ class AttributeConstraintsSchema(Schema):
 class AttributeSchema(Schema):
     id: str
     name: str
-    type: AttributeType  # varchar, integer, etc.
+    type: AttributeType = None  # varchar, integer, etc.
     length: str = ""  # varchar(255), integer(11), etc.
     parent_node: str
     constraints: AttributeConstraintsSchema = None  # nullable, unique, etc.
@@ -34,3 +34,12 @@ class NodeSchema(Schema):
     type: NodeType
     parentNode: str = None
     data: dict = None
+
+
+class SqlSchema(Schema):
+    """
+    Schema that comes from the frontend
+    """
+
+    nodes: list[NodeSchema] = None
+    edges: list[dict] = None

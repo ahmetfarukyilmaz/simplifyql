@@ -12,6 +12,8 @@ import useStore from 'store/store'
 import shallow from 'zustand/shallow'
 import { useContextMenu } from 'react-contexify'
 import ContextMenuReact from 'components/ContextMenuReact'
+import request from 'utils/request'
+import { showNotification } from '@mantine/notifications'
 
 const nodeTypes = {
   TableNode: TableNode,
@@ -63,6 +65,31 @@ function Flow() {
     }
   }
 
+  const exportData = async () => {
+    const data = {
+      nodes: nodes,
+      edges: edges,
+    }
+
+    try {
+      const response = await request.post('/sql/create-tables', data)
+      // get the file from the response
+      const file = new Blob([response.data], { type: 'text/plain' })
+      // download the file
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(file)
+      link.download = 'Generated SQL.sql'
+      document.body.appendChild(link)
+      link.click()
+    } catch (error) {
+      showNotification({
+        title: 'Error',
+        message: error.response.data.detail || 'Something went wrong',
+        color: 'red',
+      })
+    }
+  }
+
   return (
     <ReactFlowProvider onClick={handleClick}>
       <ContextMenuReact />
@@ -85,7 +112,15 @@ function Flow() {
       </ReactFlow>
       <Button
         sx={{ position: 'absolute', top: 100, right: 20 }}
-        onClick={() => console.log(nodes)}
+        onClick={exportData}
+      >
+        Generate SQL
+      </Button>
+      <Button
+        sx={{ position: 'absolute', top: 150, right: 20 }}
+        onClick={() => {
+          console.log(nodes)
+        }}
       >
         Log Nodes
       </Button>
