@@ -52,6 +52,40 @@ export default function ContextMenuReact() {
     addNode(newNode)
   }
 
+  const handleCreateAttributeType = (type) => {
+    // for each attribute node, only one attribute type can be exist
+    // so if the attribute type already exist, then remove the node
+    if (rightClickNode.data.name === type) {
+      rightClickNode.data.name = ''
+      const nodeToRemove = nodes.find(
+        (n) => n.parentNode === rightClickNode.id && n.data.name === type
+      )
+      const index = nodes.indexOf(nodeToRemove)
+      nodes.splice(index, 1)
+      onNodesChange(nodes)
+    }
+    // if the attribute type does not exist, then create the node
+    else {
+      const newNode = {
+        id: getId(),
+        type: 'AttributeTypeNode',
+        parentNode: rightClickNode.id,
+        extent: 'parent',
+        position: { x: 0, y: 0 },
+        draggable: false,
+        hidden: false,
+        data: {
+          label: 'Attribute Type',
+          name: type,
+        },
+      }
+
+      rightClickNode.data.name = type
+
+      addNode(newNode)
+    }
+  }
+
   const handleCreateAttributeConstraint = (constraint) => {
     // check if attribute constraint already true in constraints object
     if (rightClickNode.data.constraints[constraint]) {
@@ -84,7 +118,7 @@ export default function ContextMenuReact() {
     }
   }
 
-  const checkmark = (constraint) => {
+  const checkmarkForConstraint = (constraint) => {
     if (
       rightClickNode &&
       rightClickNode.type === 'AttributeNode' &&
@@ -93,6 +127,42 @@ export default function ContextMenuReact() {
       return '✓'
     }
     return ''
+  }
+
+  const checkmarkForType = (type) => {
+    if (
+      rightClickNode &&
+      rightClickNode.type === 'AttributeNode' &&
+      rightClickNode.data.name === type
+    ) {
+      return '✓'
+    }
+    return ''
+  }
+
+  const doesAttributeTypeExist = (type) => {
+    // return true if any other attribute type node exist but not the current type
+    return nodes.some(
+      (n) => n.parentNode === rightClickNode.id && n.data.name === type
+    )
+  }
+
+  const isAttributeTypeSelectDisabled = (type) => {
+    // atleast one attribute type must exist
+    if (rightClickNode) {
+      const attributeTypeNodes = nodes.filter(
+        (n) =>
+          n.parentNode === rightClickNode.id && n.type === 'AttributeTypeNode'
+      )
+      if (attributeTypeNodes.length === 0) {
+        return false
+      }
+
+      return rightClickNode.type === 'AttributeNode' &&
+        doesAttributeTypeExist(type)
+        ? false
+        : true
+    }
   }
 
   useEffect(() => {
@@ -113,16 +183,47 @@ export default function ContextMenuReact() {
   const createAttributeConstraintItem = (
     <Submenu label="Attribute Constraints">
       <Item onClick={() => handleCreateAttributeConstraint('nullable')}>
-        NULLABLE {checkmark('nullable')}
+        NULLABLE {checkmarkForConstraint('nullable')}
       </Item>
       <Item onClick={() => handleCreateAttributeConstraint('unique')}>
-        UNIQUE {checkmark('unique')}
+        UNIQUE {checkmarkForConstraint('unique')}
       </Item>
       <Item onClick={() => handleCreateAttributeConstraint('index')}>
-        INDEX {checkmark('index')}
+        INDEX {checkmarkForConstraint('index')}
       </Item>
       <Item onClick={() => handleCreateAttributeConstraint('primary_key')}>
-        PRIMARY KEY {checkmark('primary_key')}
+        PRIMARY KEY {checkmarkForConstraint('primary_key')}
+      </Item>
+    </Submenu>
+  )
+
+  // right click on AttributeNode
+
+  const createAttributeTypeItem = (
+    <Submenu label="Attribute Type">
+      <Item
+        disabled={isAttributeTypeSelectDisabled('varchar')}
+        onClick={() => handleCreateAttributeType('varchar')}
+      >
+        VARCHAR {checkmarkForType('varchar')}
+      </Item>
+      <Item
+        disabled={isAttributeTypeSelectDisabled('integer')}
+        onClick={() => handleCreateAttributeType('integer')}
+      >
+        INTEGER {checkmarkForType('integer')}
+      </Item>
+      <Item
+        disabled={isAttributeTypeSelectDisabled('boolean')}
+        onClick={() => handleCreateAttributeType('boolean')}
+      >
+        BOOLEAN {checkmarkForType('boolean')}
+      </Item>
+      <Item
+        disabled={isAttributeTypeSelectDisabled('text')}
+        onClick={() => handleCreateAttributeType('text')}
+      >
+        TEXT {checkmarkForType('text')}
       </Item>
     </Submenu>
   )
@@ -137,6 +238,9 @@ export default function ContextMenuReact() {
         {rightClickNode &&
           rightClickNode.type === 'AttributeNode' &&
           createAttributeConstraintItem}
+        {rightClickNode &&
+          rightClickNode.type === 'AttributeNode' &&
+          createAttributeTypeItem}
       </Menu>
     </div>
   )

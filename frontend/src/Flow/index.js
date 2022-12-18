@@ -2,7 +2,12 @@ import { useRef, useCallback } from 'react'
 import ReactFlow, { Background, Controls, ReactFlowProvider } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { Button } from '@mantine/core'
-import { TableNode, AttributeNode, AttributeConstraintNode } from 'nodes'
+import {
+  TableNode,
+  AttributeNode,
+  AttributeConstraintNode,
+  AttributeTypeNode,
+} from 'nodes'
 import useStore from 'store/store'
 import shallow from 'zustand/shallow'
 import { useContextMenu } from 'react-contexify'
@@ -12,6 +17,7 @@ const nodeTypes = {
   TableNode: TableNode,
   AttributeNode: AttributeNode,
   AttributeConstraintNode: AttributeConstraintNode,
+  AttributeTypeNode: AttributeTypeNode,
 }
 
 const selector = (state) => ({

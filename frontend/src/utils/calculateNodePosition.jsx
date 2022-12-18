@@ -72,7 +72,7 @@ const generateAttributeConstraintNodeWidth = (attributeName) => {
     case 'index':
       return 46
     default:
-      return 0
+      return 60
   }
 }
 
