@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useInputState } from '@mantine/hooks'
 
 const AttributeTypeNode = ({ data }) => {
-  const [length, setLength] = useState(0)
+  const [length, setLength] = useInputState(data.length || 0)
 
   const handleChange = (event) => {
     setLength(event.target.value)
@@ -9,7 +9,7 @@ const AttributeTypeNode = ({ data }) => {
   }
 
   const lengthSelector = () => {
-    return data.name === 'varchar' ? (
+    return data.type === 'varchar' ? (
       <input
         style={{
           width: '25px',
@@ -49,7 +49,7 @@ const AttributeTypeNode = ({ data }) => {
           textAlign: 'center',
         }}
       >
-        {data.name}
+        {data.type}
       </div>
       {lengthSelector()}
     </div>

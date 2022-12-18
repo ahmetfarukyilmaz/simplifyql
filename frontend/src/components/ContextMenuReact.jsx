@@ -55,10 +55,10 @@ export default function ContextMenuReact() {
   const handleCreateAttributeType = (type) => {
     // for each attribute node, only one attribute type can be exist
     // so if the attribute type already exist, then remove the node
-    if (rightClickNode.data.name === type) {
-      rightClickNode.data.name = ''
+    if (rightClickNode.data.type === type) {
+      rightClickNode.data.type = ''
       const nodeToRemove = nodes.find(
-        (n) => n.parentNode === rightClickNode.id && n.data.name === type
+        (n) => n.parentNode === rightClickNode.id && n.data.type === type
       )
       const index = nodes.indexOf(nodeToRemove)
       nodes.splice(index, 1)
@@ -76,11 +76,11 @@ export default function ContextMenuReact() {
         hidden: false,
         data: {
           label: 'Attribute Type',
-          name: type,
+          type: type,
         },
       }
 
-      rightClickNode.data.name = type
+      rightClickNode.data.type = type
 
       addNode(newNode)
     }
@@ -133,7 +133,7 @@ export default function ContextMenuReact() {
     if (
       rightClickNode &&
       rightClickNode.type === 'AttributeNode' &&
-      rightClickNode.data.name === type
+      rightClickNode.data.type === type
     ) {
       return '✓'
     }
@@ -143,7 +143,7 @@ export default function ContextMenuReact() {
   const doesAttributeTypeExist = (type) => {
     // return true if any other attribute type node exist but not the current type
     return nodes.some(
-      (n) => n.parentNode === rightClickNode.id && n.data.name === type
+      (n) => n.parentNode === rightClickNode.id && n.data.type === type
     )
   }
 
