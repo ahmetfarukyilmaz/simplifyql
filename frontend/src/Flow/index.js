@@ -1,7 +1,7 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useState } from 'react'
 import ReactFlow, { Background, Controls, ReactFlowProvider } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { Button } from '@mantine/core'
+import { Button, Badge } from '@mantine/core'
 import {
   TableNode,
   AttributeNode,
@@ -28,14 +28,22 @@ const selector = (state) => ({
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
   onConnect: state.onConnect,
+  setSelectedNode: state.setSelectedNode,
+  selectedNode: state.selectedNode,
 })
 
 function Flow() {
   const reactFlowWrapper = useRef(null)
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(
-    selector,
-    shallow
-  )
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    selectedNode,
+    setSelectedNode,
+  } = useStore(selector, shallow)
+  //const [selectedNode, setSelectedNode] = useState(null)
 
   const { show } = useContextMenu({
     id: 'menu-id',
@@ -90,12 +98,35 @@ function Flow() {
     }
   }
 
+  // on node click, set the selected node
+  const onNodeClick = (e, node) => {
+    e.stopPropagation()
+    setSelectedNode(node)
+  }
+
+  const displayNodeInfo = () => {
+    let displayString = ''
+    if (selectedNode) {
+      const type = selectedNode.type.split(/(?=[A-Z])/)
+      if (selectedNode.type === 'AttributeTypeNode') {
+        displayString = `${type.join(' ')}: ${selectedNode.data.type}`
+      } else {
+        const name = selectedNode.data.name || '-'
+        displayString = `${type.join(' ')}: ${name}`
+      }
+    } else {
+      displayString = 'No node selected'
+    }
+    return displayString
+  }
+
   return (
     <ReactFlowProvider onClick={handleClick}>
       <ContextMenuReact />
 
       <ReactFlow
         onClick={handleClick}
+        onNodeClick={onNodeClick}
         onContextMenu={displayMenu}
         ref={reactFlowWrapper}
         nodes={nodes}
@@ -124,6 +155,13 @@ function Flow() {
       >
         Log Nodes
       </Button>
+      <Badge
+        sx={{ position: 'absolute', top: 100, left: 20 }}
+        size="lg"
+        color="dark"
+      >
+        {displayNodeInfo()}
+      </Badge>
     </ReactFlowProvider>
   )
 }

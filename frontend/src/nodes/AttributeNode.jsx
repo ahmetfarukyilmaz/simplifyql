@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import useStore from 'store/store'
 import shallow from 'zustand/shallow'
 import { Paper, TextInput } from '@mantine/core'
@@ -11,8 +11,6 @@ import {
 import { UpdateAttributeConstraintNodePositions } from 'utils/calculateNodePosition'
 const selector = (state) => ({
   nodes: state.nodes,
-  showNodes: state.showNodes,
-  hideNodes: state.hideNodes,
 })
 
 const paperStyles = {
@@ -28,8 +26,7 @@ const paperStyles = {
 
 function AttributeNode(props) {
   const [attributeName, setAttributeName] = useInputState(props.data.name || '')
-  const [childNodes, setChildNodes] = useState([])
-  const { nodes, showNodes, hideNodes } = useStore(selector, shallow)
+  const { nodes } = useStore(selector, shallow)
 
   const onInputChange = (event) => {
     setAttributeName(event.target.value)
@@ -37,12 +34,10 @@ function AttributeNode(props) {
   }
 
   useEffect(() => {
-    const childNodes = nodes.filter((n) => n.parentNode === props.id)
-    setChildNodes(childNodes)
     const parentNode = nodes.find((n) => n.id === props.id)
     // if node itself is deleted, do not update attribute positions, it will cause error
     if (parentNode) UpdateAttributeConstraintNodePositions(nodes, parentNode)
-  }, [nodes])
+  }, [nodes, props.id])
 
   return (
     <Paper sx={paperStyles} shadow="xs" radius="lg" bg="gray">

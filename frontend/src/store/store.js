@@ -67,6 +67,12 @@ const useStore = create((set, get) => ({
       edges: addEdge(connection, get().edges),
     })
   },
+  selectedNode: null,
+  setSelectedNode: (node) => {
+    set({
+      selectedNode: node,
+    })
+  },
 }))
 
 export default useStore

@@ -17,10 +17,14 @@ const selector = (state) => ({
   nodes: state.nodes,
   hideNodes: state.hideNodes,
   showNodes: state.showNodes,
+  selectedNode: state.selectedNode,
 })
 
 function TableNode(props) {
-  const { nodes, hideNodes, showNodes } = useStore(selector, shallow)
+  const { nodes, hideNodes, showNodes, selectedNode } = useStore(
+    selector,
+    shallow
+  )
   const [childNodes, setChildNodes] = useState([])
   const [tableName, setTableName] = useInputState(props.data.name || '')
   const [opened, setOpened] = useState(true)
@@ -55,10 +59,9 @@ function TableNode(props) {
   useEffect(() => {
     const childNodes = nodes.filter((n) => n.parentNode === props.id)
     setChildNodes(childNodes)
-    const parentNode = nodes.find((n) => n.id === props.id)
     // if TableNode itself is deleted, do not update attribute positions, it will cause error
-    if (parentNode) UpdateAttributeNodePositions(nodes, parentNode)
-  }, [nodes, props.id])
+    if (selectedNode) UpdateAttributeNodePositions(nodes, selectedNode)
+  }, [nodes, props.id, selectedNode])
 
   return (
     <>
