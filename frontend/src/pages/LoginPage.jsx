@@ -123,7 +123,7 @@ export function LoginPage() {
             }
           />
           <Button fullWidth mt="xl" size="md" type="submit">
-            Register
+            Login
           </Button>
         </form>
 
