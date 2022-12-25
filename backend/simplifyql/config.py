@@ -3,7 +3,7 @@ from environs import Env
 env = Env()
 env.read_env()
 
-DEBUG = env.bool("DEBUG", False)
+DEBUG = env.bool("DEBUG", True)
 SECRET_KEY = env.str("SECRET_KEY")
 
 POSTGRES_SERVER = env.str("POSTGRES_SERVER")

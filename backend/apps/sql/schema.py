@@ -13,7 +13,7 @@ class AttributeConstraintsSchema(Schema):
 class AttributeSchema(Schema):
     id: str
     name: str
-    type: AttributeType = None  # varchar, integer, etc.
+    type: AttributeType  # varchar, integer, etc.
     length: str = ""  # varchar(255), integer(11), etc.
     parent_node: str
     constraints: AttributeConstraintsSchema = None  # nullable, unique, etc.
@@ -43,3 +43,5 @@ class SqlSchema(Schema):
 
     nodes: list[NodeSchema] = None
     edges: list[dict] = None
+    name: str
+    raw_data: dict = {}

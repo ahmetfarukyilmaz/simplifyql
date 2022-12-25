@@ -1,7 +1,7 @@
 import { useRef, useCallback, useState } from 'react'
 import ReactFlow, { Background, Controls, ReactFlowProvider } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { Button, Badge } from '@mantine/core'
+import { Button, Badge, Modal, Input } from '@mantine/core'
 import {
   TableNode,
   AttributeNode,
@@ -34,6 +34,10 @@ const selector = (state) => ({
 
 function Flow() {
   const reactFlowWrapper = useRef(null)
+  const [rfInstance, setRfInstance] = useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [diagramName, setDiagramName] = useState('')
+
   const {
     nodes,
     edges,
@@ -43,7 +47,6 @@ function Flow() {
     selectedNode,
     setSelectedNode,
   } = useStore(selector, shallow)
-  //const [selectedNode, setSelectedNode] = useState(null)
 
   const { show } = useContextMenu({
     id: 'menu-id',
@@ -77,25 +80,38 @@ function Flow() {
     const data = {
       nodes: nodes,
       edges: edges,
+      raw_data: rfInstance.toObject(),
+      name: diagramName,
     }
 
     try {
       const response = await request.post('/sql/create-tables', data)
+
       // get the file from the response
       const file = new Blob([response.data], { type: 'text/plain' })
       // download the file
       const link = document.createElement('a')
       link.href = URL.createObjectURL(file)
-      link.download = 'Generated SQL.sql'
+      link.download = data.name + '.sql'
       document.body.appendChild(link)
       link.click()
+      showNotification({
+        title: 'Success',
+        message: 'SQL file generated',
+        color: 'green',
+      })
     } catch (error) {
+      const errorMessage =
+        error.response.data.detail ||
+        error.response.data ||
+        'Something went wrong'
       showNotification({
         title: 'Error',
-        message: error.response.data.detail || 'Something went wrong',
+        message: errorMessage,
         color: 'red',
       })
     }
+    setModalOpen(false)
   }
 
   // on node click, set the selected node
@@ -125,6 +141,7 @@ function Flow() {
       <ContextMenuReact />
 
       <ReactFlow
+        onInit={setRfInstance}
         onClick={handleClick}
         onNodeClick={onNodeClick}
         onContextMenu={displayMenu}
@@ -143,7 +160,7 @@ function Flow() {
       </ReactFlow>
       <Button
         sx={{ position: 'absolute', top: 100, right: 20 }}
-        onClick={exportData}
+        onClick={() => setModalOpen(true)}
       >
         Generate SQL
       </Button>
@@ -162,6 +179,28 @@ function Flow() {
       >
         {displayNodeInfo()}
       </Badge>
+      <Modal
+        opened={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Generate SQL"
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          }}
+        >
+          <Input
+            label="Diagram Name"
+            placeholder="Enter diagram name"
+            required
+            onChange={(e) => setDiagramName(e.target.value)}
+          />
+
+          <Button onClick={exportData}>Generate</Button>
+        </div>
+      </Modal>
     </ReactFlowProvider>
   )
 }

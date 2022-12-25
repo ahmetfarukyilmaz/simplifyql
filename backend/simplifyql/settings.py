@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Third party apps
     "corsheaders",
     # Local apps
+    "core",
     "users",
     "sql",
 ]

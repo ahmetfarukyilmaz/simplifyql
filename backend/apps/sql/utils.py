@@ -12,15 +12,15 @@ def identify_nodes(nodes: list[NodeSchema]) -> tuple[list[TableSchema], list[Att
             tables.append(
                 TableSchema(
                     id=node.id,
-                    name=node.data["name"],
+                    name=node.data.get("name"),
                 )
             )
         elif node.type == NodeType.ATTRIBUTE:
             attributes.append(
                 AttributeSchema(
                     id=node.id,
-                    name=node.data["name"],
-                    type=node.data["type"],
+                    name=node.data.get("name"),
+                    type=node.data.get("type"),
                     length=node.data.get("length", ""),
                     parent_node=node.parentNode,
                     constraints=node.data.get("constraints", []),
