@@ -10,6 +10,13 @@ class AttributeConstraintsSchema(Schema):
     index: bool = False
 
 
+class AttributeTypeSchema(Schema):
+    id: str
+    parentNode: str
+    type: NodeType = NodeType.ATTRIBUTE_TYPE
+    data: dict = None
+
+
 class AttributeSchema(Schema):
     id: str
     name: str

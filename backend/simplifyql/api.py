@@ -17,4 +17,4 @@ api.add_router("/sql/", sql_router, tags=["sql"])
 @api.exception_handler(exc_class=PydanticValidationError)
 def validation_error_handler(request, exc):
     error_message = str(exc) if config.DEBUG else "Validation error"
-    return HttpResponse(error_message, status=400)
+    return HttpResponse(error_message, status=422)

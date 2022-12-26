@@ -1,11 +1,12 @@
 from .enums import NodeType
-from .schema import AttributeSchema, NodeSchema, TableSchema
+from .schema import AttributeSchema, AttributeTypeSchema, NodeSchema, TableSchema
 
 
 def identify_nodes(nodes: list[NodeSchema]) -> tuple[list[TableSchema], list[AttributeSchema]]:
     """Identify nodes and return them as a tuple of tables and attributes"""
     tables = []
     attributes = []
+    attribute_types = []
 
     for node in nodes:
         if node.type == NodeType.TABLE:
@@ -27,7 +28,16 @@ def identify_nodes(nodes: list[NodeSchema]) -> tuple[list[TableSchema], list[Att
                 )
             )
 
-    return tables, attributes
+        elif node.type == NodeType.ATTRIBUTE_TYPE:
+            attribute_types.append(
+                AttributeTypeSchema(
+                    id=node.id,
+                    parentNode=node.parentNode,
+                    data=node.data,
+                )
+            )
+
+    return tables, attributes, attribute_types
 
 
 def add_attributes_to_tables(tables: list[TableSchema], attributes: list[AttributeSchema]) -> list[TableSchema]:
@@ -43,9 +53,26 @@ def add_attributes_to_tables(tables: list[TableSchema], attributes: list[Attribu
     return tables
 
 
+def add_attribute_types_to_attributes(
+    attributes: list[AttributeSchema],
+    attribute_types: list[AttributeTypeSchema],
+) -> list[AttributeSchema]:
+    """Add attribute types to attributes"""
+
+    # if attribute_type.parentNode == attribute.id then add attribute_type to attribute.type
+    for attribute in attributes:
+        for attribute_type in attribute_types:
+            if attribute_type.parentNode == attribute.id:
+                attribute.length = attribute_type.data.get("length", "")
+                break
+
+    return attributes
+
+
 def get_sql(data: list[NodeSchema]) -> list[TableSchema]:
 
-    tables, attributes = identify_nodes(data)
+    tables, attributes, attribute_types = identify_nodes(data)
+    attributes = add_attribute_types_to_attributes(attributes, attribute_types)
     tables = add_attributes_to_tables(tables, attributes)
 
     return tables
@@ -66,8 +93,8 @@ def generate_sql_code(tables):
             column_name = attribute.name
             column_type = attribute.type
 
-            # Add the column definition to the list of columns
-            column = "{} {}".format(column_name, column_type)
+            # Add the column definition to the list of columns, use quotes for the column name
+            column = '"{}" {}'.format(column_name, column_type)
 
             # Check if the column has a length specified
             if attribute.length:
