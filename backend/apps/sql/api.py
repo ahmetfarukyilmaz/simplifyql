@@ -21,10 +21,10 @@ def create_tables(request, data: SqlSchema):
     # edges = data.edges
     name = data.name
     raw_data = data.raw_data
+    ErDiagram.save_er_diagram(raw_data=raw_data, name=name, user=user)
 
     tables = get_sql(nodes)
     sql_code = generate_sql_code(tables)
-    ErDiagram.save_er_diagram(raw_data=raw_data, name=name, user=user)
     return sql_code
 
 
@@ -39,7 +39,7 @@ def get_er_diagrams(request):
     return list(er_diagrams)
 
 
-@router.get("restore-er-diagram/{id}", response={200: str, 400: ErrorSchema})
+@router.get("restore-er-diagram/{id}", response={200: dict, 400: ErrorSchema})
 def restore_er_diagram(request, id: int):
     auth_token = request.headers.get("Authorization")
     user = UserModel.objects.filter(auth_token=auth_token).first()
