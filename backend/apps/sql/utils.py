@@ -1,3 +1,5 @@
+from ninja.errors import HttpError
+
 from .enums import NodeType
 from .schema import AttributeSchema, AttributeTypeSchema, NodeSchema, TableSchema
 
@@ -69,13 +71,32 @@ def add_attribute_types_to_attributes(
     return attributes
 
 
-def get_sql(data: list[NodeSchema]) -> list[TableSchema]:
+def get_sql(data: list[NodeSchema]):
 
     tables, attributes, attribute_types = identify_nodes(data)
     attributes = add_attribute_types_to_attributes(attributes, attribute_types)
     tables = add_attributes_to_tables(tables, attributes)
+    primary_key_check, table_name = check_primary_key(tables)
+    if not primary_key_check:
+        raise HttpError(400, f"Table {table_name} has multiple primary keys")
 
     return tables
+
+
+# one table can not have multiple primary keys
+def check_primary_key(tables: list[TableSchema]):
+    """Check if a table has multiple primary keys"""
+
+    for table in tables:
+        primary_key_count = 0
+        for attribute in table.attributes:
+            if attribute.constraints.primary_key:
+                primary_key_count += 1
+
+        if primary_key_count > 1:
+            return False, table.name
+
+    return True, None
 
 
 def generate_sql_code(tables):
