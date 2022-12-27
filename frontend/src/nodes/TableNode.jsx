@@ -21,6 +21,18 @@ const selector = (state) => ({
   selectedNode: state.selectedNode,
 })
 
+const handleStyle = {
+  width: '100%',
+  height: '100%',
+  background: 'transparent',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  transform: 'none',
+  border: 'none',
+  opacity: 0,
+}
+
 function TableNode(props) {
   const { nodes, hideNodes, showNodes, selectedNode } = useStore(
     selector,
@@ -66,10 +78,10 @@ function TableNode(props) {
 
   return (
     <>
-      <Handle position="top" id="a" />
-      <Handle position="right" id="b" />
-      <Handle position="bottom" id="c" />
-      <Handle position="left" id="d" />
+      <Handle style={handleStyle} position="top" id="a" />
+      <Handle style={handleStyle} position="right" id="b" />
+      <Handle style={handleStyle} position="bottom" id="c" />
+      <Handle style={handleStyle} position="left" id="d" />
       <Paper
         shadow="xs"
         p="lg"

@@ -1,17 +1,5 @@
 import create from 'zustand'
-import {
-  Connection,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
-  addEdge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
-  applyNodeChanges,
-  applyEdgeChanges,
-} from 'reactflow'
+import { addEdge, applyNodeChanges, applyEdgeChanges } from 'reactflow'
 
 import { initialEdges, initialNodes } from './nodes'
 
@@ -65,6 +53,24 @@ const useStore = create((set, get) => ({
     })
   },
   onConnect: (connection) => {
+    // if there is already an edge between the two nodes, don't create a new one
+    if (
+      get().edges.find(
+        (edge) =>
+          (edge.source === connection.target &&
+            edge.target === connection.source) ||
+          (edge.source === connection.source &&
+            edge.target === connection.target)
+      )
+    ) {
+      return
+    }
+
+    // dont create an edge if the source and target are the same
+    if (connection.source === connection.target) {
+      return
+    }
+
     set({
       edges: addEdge(
         {

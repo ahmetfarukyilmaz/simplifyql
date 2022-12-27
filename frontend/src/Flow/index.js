@@ -1,10 +1,5 @@
 import { useRef, useCallback, useState } from 'react'
-import ReactFlow, {
-  Background,
-  Controls,
-  ReactFlowProvider,
-  MarkerType,
-} from 'reactflow'
+import ReactFlow, { Background, Controls, ReactFlowProvider } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { Button, Badge, Modal, Input } from '@mantine/core'
 import {
@@ -20,6 +15,7 @@ import ContextMenuReact from 'components/ContextMenuReact'
 import request from 'utils/request'
 import { showNotification } from '@mantine/notifications'
 import SimpleFloatingEdge from 'edges/SimpleFloatingEdge'
+import CustomConnectionLine from 'edges/CustomConnectionLine'
 
 const nodeTypes = {
   TableNode: TableNode,
@@ -39,7 +35,6 @@ const selector = (state) => ({
   onConnect: state.onConnect,
   setSelectedNode: state.setSelectedNode,
   selectedNode: state.selectedNode,
-  setEdges: state.setEdges,
 })
 
 function Flow() {
@@ -56,12 +51,20 @@ function Flow() {
     onConnect,
     selectedNode,
     setSelectedNode,
-    setEdges,
   } = useStore(selector, shallow)
 
   const { show } = useContextMenu({
     id: 'menu-id',
   })
+
+  const connectionLineStyle = {
+    strokeWidth: 3,
+    stroke: 'black',
+  }
+
+  const defaultEdgeOptions = {
+    style: connectionLineStyle,
+  }
 
   const onDragOver = useCallback((event) => {
     event.preventDefault()
@@ -167,6 +170,9 @@ function Flow() {
         edgeTypes={edgeTypes}
         proOptions={{ hideAttribution: true }}
         connectionMode="loose"
+        connectionLineStyle={connectionLineStyle}
+        connectionLineComponent={CustomConnectionLine}
+        defaultEdgeOptions={defaultEdgeOptions}
       >
         <Background />
         <Controls />
@@ -180,10 +186,18 @@ function Flow() {
       <Button
         sx={{ position: 'absolute', top: 150, right: 20 }}
         onClick={() => {
-          console.log(nodes, edges)
+          console.log(nodes)
         }}
       >
         Log Nodes
+      </Button>
+      <Button
+        sx={{ position: 'absolute', top: 200, right: 20 }}
+        onClick={() => {
+          console.log(edges)
+        }}
+      >
+        Log Edges
       </Button>
       <Badge
         sx={{ position: 'absolute', top: 100, left: 20 }}
