@@ -13,14 +13,16 @@ import {
   applyEdgeChanges,
 } from 'reactflow'
 
-import initialNodes from './nodes'
-//import initialEdges from './edges'
+import { initialEdges, initialNodes } from './nodes'
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create((set, get) => ({
   nodes: initialNodes,
-  id: 3,
+  edges: initialEdges,
+  id: 1,
+  edgeId: 1,
   getId: () => `node-${get().id++}`,
+  getEdgeId: () => `edge-${get().edgeId++}`,
   addNode: (node) => {
     set({
       nodes: [...get().nodes, node],
@@ -64,13 +66,26 @@ const useStore = create((set, get) => ({
   },
   onConnect: (connection) => {
     set({
-      edges: addEdge(connection, get().edges),
+      edges: addEdge(
+        {
+          ...connection,
+          id: get().getEdgeId(),
+          type: 'floating',
+        },
+
+        get().edges
+      ),
     })
   },
   selectedNode: null,
   setSelectedNode: (node) => {
     set({
       selectedNode: node,
+    })
+  },
+  setEdges: (edges) => {
+    set({
+      edges: edges,
     })
   },
 }))

@@ -12,6 +12,7 @@ import shallow from 'zustand/shallow'
 import { IconArrowAutofitDown } from '@tabler/icons'
 import { AttributeNode } from 'nodes'
 import { UpdateAttributeNodePositions } from 'utils/calculateNodePosition'
+import { Handle } from 'reactflow'
 import { TABLE_HEIGHT, TABLE_WIDTH, TABLE_CONTENT_MIN_HEIGHT } from 'constants'
 const selector = (state) => ({
   nodes: state.nodes,
@@ -65,6 +66,10 @@ function TableNode(props) {
 
   return (
     <>
+      <Handle position="top" id="a" />
+      <Handle position="right" id="b" />
+      <Handle position="bottom" id="c" />
+      <Handle position="left" id="d" />
       <Paper
         shadow="xs"
         p="lg"

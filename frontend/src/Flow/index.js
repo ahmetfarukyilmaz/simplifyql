@@ -1,5 +1,10 @@
 import { useRef, useCallback, useState } from 'react'
-import ReactFlow, { Background, Controls, ReactFlowProvider } from 'reactflow'
+import ReactFlow, {
+  Background,
+  Controls,
+  ReactFlowProvider,
+  MarkerType,
+} from 'reactflow'
 import 'reactflow/dist/style.css'
 import { Button, Badge, Modal, Input } from '@mantine/core'
 import {
@@ -14,12 +19,16 @@ import { useContextMenu } from 'react-contexify'
 import ContextMenuReact from 'components/ContextMenuReact'
 import request from 'utils/request'
 import { showNotification } from '@mantine/notifications'
+import SimpleFloatingEdge from 'edges/SimpleFloatingEdge'
 
 const nodeTypes = {
   TableNode: TableNode,
   AttributeNode: AttributeNode,
   AttributeConstraintNode: AttributeConstraintNode,
   AttributeTypeNode: AttributeTypeNode,
+}
+const edgeTypes = {
+  floating: SimpleFloatingEdge,
 }
 
 const selector = (state) => ({
@@ -30,6 +39,7 @@ const selector = (state) => ({
   onConnect: state.onConnect,
   setSelectedNode: state.setSelectedNode,
   selectedNode: state.selectedNode,
+  setEdges: state.setEdges,
 })
 
 function Flow() {
@@ -46,6 +56,7 @@ function Flow() {
     onConnect,
     selectedNode,
     setSelectedNode,
+    setEdges,
   } = useStore(selector, shallow)
 
   const { show } = useContextMenu({
@@ -153,7 +164,9 @@ function Flow() {
         onConnect={onConnect}
         onDragOver={onDragOver}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         proOptions={{ hideAttribution: true }}
+        connectionMode="loose"
       >
         <Background />
         <Controls />
@@ -167,7 +180,7 @@ function Flow() {
       <Button
         sx={{ position: 'absolute', top: 150, right: 20 }}
         onClick={() => {
-          console.log(nodes)
+          console.log(nodes, edges)
         }}
       >
         Log Nodes

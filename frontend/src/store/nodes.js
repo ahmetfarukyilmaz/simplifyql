@@ -1,3 +1,2 @@
-const initialNodes = []
-
-export default initialNodes
+export const initialNodes = []
+export const initialEdges = []
