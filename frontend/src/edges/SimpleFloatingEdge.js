@@ -3,7 +3,14 @@ import { useStore, getBezierPath } from 'reactflow'
 
 import { getEdgeParams } from './utils.js'
 
-function SimpleFloatingEdge({ id, source, target, markerEnd, style }) {
+function SimpleFloatingEdge({
+  id,
+  source,
+  target,
+  markerEnd,
+  markerStart,
+  style,
+}) {
   const sourceNode = useStore(
     useCallback((store) => store.nodeInternals.get(source), [source])
   )
@@ -36,6 +43,7 @@ function SimpleFloatingEdge({ id, source, target, markerEnd, style }) {
       d={edgePath}
       strokeWidth={5}
       markerEnd={markerEnd}
+      markerStart={markerStart}
       style={style}
     />
   )

@@ -82,78 +82,84 @@ function TableNode(props) {
       <Handle style={handleStyle} position="right" id="b" />
       <Handle style={handleStyle} position="bottom" id="c" />
       <Handle style={handleStyle} position="left" id="d" />
-      <Paper
-        shadow="xs"
-        p="lg"
-        radius="lg"
-        bg="blue"
-        sx={{
-          borderBottomLeftRadius: opened ? 0 : 'lg',
-          borderBottomRightRadius: opened ? 0 : 'lg',
-          height: TABLE_HEIGHT,
-          width: TABLE_WIDTH,
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
+      <div
+        style={{
+          margin: '10px',
         }}
       >
-        <TextInput
-          value={tableName}
-          onChange={onInputChange}
-          placeholder="Table Name"
-          required
-          variant="unstyled"
-          sx={{ width: '75%' }}
-        />
-        <ActionIcon
-          onClick={handleCollapse}
-          color="blue"
-          variant="filled"
-          size="lg"
-          style={{ position: 'absolute', right: 10, top: 10 }}
-        >
-          <IconArrowAutofitDown color="white" />
-        </ActionIcon>
-      </Paper>
-      <Collapse in={opened} transitionDuration={200}>
         <Paper
           shadow="xs"
-          radius="lg"
-          sx={{
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            minHeight: TABLE_CONTENT_MIN_HEIGHT,
-          }}
           p="lg"
-          withBorder
-          bg="white"
+          radius="lg"
+          bg="blue"
+          sx={{
+            borderBottomLeftRadius: opened ? 0 : 'lg',
+            borderBottomRightRadius: opened ? 0 : 'lg',
+            height: TABLE_HEIGHT,
+            width: TABLE_WIDTH,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
         >
-          <SimpleGrid
-            sx={{
-              gridGap: '1rem',
-              gridTemplateRows: 'repeat(1, 1fr)',
-            }}
-            cols={1}
+          <TextInput
+            value={tableName}
+            onChange={onInputChange}
+            placeholder="Table Name"
+            required
+            variant="unstyled"
+            sx={{ width: '75%' }}
+          />
+          <ActionIcon
+            onClick={handleCollapse}
+            color="blue"
+            variant="filled"
+            size="lg"
+            style={{ position: 'absolute', right: 20, top: 20 }}
           >
-            {childNodes.map((node) => (
-              <div
-                key={node.id}
-                style={{
-                  visibility: 'hidden',
-                }}
-              >
-                <AttributeNode
-                  key={node.id}
-                  data={node.data}
-                  name={node.data.name}
-                  id={node.id}
-                  hideNodes={hideNodes}
-                />
-              </div>
-            ))}
-          </SimpleGrid>
+            <IconArrowAutofitDown color="white" />
+          </ActionIcon>
         </Paper>
-      </Collapse>
+        <Collapse in={opened} transitionDuration={200}>
+          <Paper
+            shadow="xs"
+            radius="lg"
+            sx={{
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+              minHeight: TABLE_CONTENT_MIN_HEIGHT,
+            }}
+            p="lg"
+            withBorder
+            bg="white"
+          >
+            <SimpleGrid
+              sx={{
+                gridGap: '1rem',
+                gridTemplateRows: 'repeat(1, 1fr)',
+              }}
+              cols={1}
+            >
+              {childNodes.map((node) => (
+                <div
+                  key={node.id}
+                  style={{
+                    visibility: 'hidden',
+                  }}
+                >
+                  <AttributeNode
+                    key={node.id}
+                    data={node.data}
+                    name={node.data.name}
+                    id={node.id}
+                    hideNodes={hideNodes}
+                  />
+                </div>
+              ))}
+            </SimpleGrid>
+          </Paper>
+        </Collapse>
+      </div>
     </>
   )
 }

@@ -77,6 +77,9 @@ const useStore = create((set, get) => ({
           ...connection,
           id: get().getEdgeId(),
           type: 'floating',
+          markerEnd: 'edge-null',
+          markerStart: 'edge-one',
+          animated: true,
         },
 
         get().edges

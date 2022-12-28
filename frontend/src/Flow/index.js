@@ -16,7 +16,7 @@ import request from 'utils/request'
 import { showNotification } from '@mantine/notifications'
 import SimpleFloatingEdge from 'edges/SimpleFloatingEdge'
 import CustomConnectionLine from 'edges/CustomConnectionLine'
-
+import { markers } from './markers'
 const nodeTypes = {
   TableNode: TableNode,
   AttributeNode: AttributeNode,
@@ -157,6 +157,7 @@ function Flow() {
       >
         <Background />
         <Controls />
+        {markers}
       </ReactFlow>
       <Button
         sx={{ position: 'absolute', top: 100, right: 20 }}
