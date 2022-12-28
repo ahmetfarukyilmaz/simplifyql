@@ -1,7 +1,7 @@
 import { useInputState } from '@mantine/hooks'
 
 const AttributeTypeNode = ({ data }) => {
-  const [length, setLength] = useInputState(data.length || 0)
+  const [length, setLength] = useInputState(data.length || 255)
 
   const handleChange = (event) => {
     setLength(event.target.value)

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Menu, Item, Submenu } from 'react-contexify'
 import shallow from 'zustand/shallow'
 import useStore from 'store/store'
@@ -11,11 +10,14 @@ const selector = (state) => ({
   getId: state.getId,
   nodes: state.nodes,
   onNodesChange: state.onNodesChange,
+  selectedNode: state.selectedNode,
 })
 
 export default function ContextMenuReact() {
-  const { addNode, getId, nodes, onNodesChange } = useStore(selector, shallow)
-  const [rightClickNode, setRightClickNode] = useState(null)
+  const { addNode, getId, nodes, onNodesChange, selectedNode } = useStore(
+    selector,
+    shallow
+  )
 
   function handleCreateTable(e) {
     const x = e.event.clientX
@@ -34,7 +36,7 @@ export default function ContextMenuReact() {
     const newNode = {
       id: getId(),
       type: 'AttributeNode',
-      parentNode: rightClickNode.id,
+      parentNode: selectedNode.id,
       extent: 'parent',
       position: { x: 0, y: 0 },
       draggable: false,
@@ -55,10 +57,10 @@ export default function ContextMenuReact() {
   const handleCreateAttributeType = (type) => {
     // for each attribute node, only one attribute type can be exist
     // so if the attribute type already exist, then remove the node
-    if (rightClickNode.data.type === type) {
-      rightClickNode.data.type = ''
+    if (selectedNode.data.type === type) {
+      selectedNode.data.type = ''
       const nodeToRemove = nodes.find(
-        (n) => n.parentNode === rightClickNode.id && n.data.type === type
+        (n) => n.parentNode === selectedNode.id && n.data.type === type
       )
       const index = nodes.indexOf(nodeToRemove)
       nodes.splice(index, 1)
@@ -69,7 +71,7 @@ export default function ContextMenuReact() {
       const newNode = {
         id: getId(),
         type: 'AttributeTypeNode',
-        parentNode: rightClickNode.id,
+        parentNode: selectedNode.id,
         extent: 'parent',
         position: { x: 0, y: 0 },
         draggable: false,
@@ -80,7 +82,7 @@ export default function ContextMenuReact() {
         },
       }
 
-      rightClickNode.data.type = type
+      selectedNode.data.type = type
 
       addNode(newNode)
     }
@@ -88,11 +90,11 @@ export default function ContextMenuReact() {
 
   const handleCreateAttributeConstraint = (constraint) => {
     // check if attribute constraint already true in constraints object
-    if (rightClickNode.data.constraints[constraint]) {
+    if (selectedNode.data.constraints[constraint]) {
       // make constraint false and remove the node
-      rightClickNode.data.constraints[constraint] = false
+      selectedNode.data.constraints[constraint] = false
       const nodeToRemove = nodes.find(
-        (n) => n.parentNode === rightClickNode.id && n.data.name === constraint
+        (n) => n.parentNode === selectedNode.id && n.data.name === constraint
       )
       const index = nodes.indexOf(nodeToRemove)
       nodes.splice(index, 1)
@@ -101,7 +103,7 @@ export default function ContextMenuReact() {
       const newNode = {
         id: getId(),
         type: 'AttributeConstraintNode',
-        parentNode: rightClickNode.id,
+        parentNode: selectedNode.id,
         extent: 'parent',
         position: { x: 0, y: 0 },
         draggable: false,
@@ -112,7 +114,7 @@ export default function ContextMenuReact() {
         },
       }
 
-      rightClickNode.data.constraints[constraint] = true
+      selectedNode.data.constraints[constraint] = true
 
       addNode(newNode)
     }
@@ -120,9 +122,9 @@ export default function ContextMenuReact() {
 
   const checkmarkForConstraint = (constraint) => {
     if (
-      rightClickNode &&
-      rightClickNode.type === 'AttributeNode' &&
-      rightClickNode.data.constraints[constraint]
+      selectedNode &&
+      selectedNode.type === 'AttributeNode' &&
+      selectedNode.data.constraints[constraint]
     ) {
       return '✓'
     }
@@ -131,9 +133,9 @@ export default function ContextMenuReact() {
 
   const checkmarkForType = (type) => {
     if (
-      rightClickNode &&
-      rightClickNode.type === 'AttributeNode' &&
-      rightClickNode.data.type === type
+      selectedNode &&
+      selectedNode.type === 'AttributeNode' &&
+      selectedNode.data.type === type
     ) {
       return '✓'
     }
@@ -143,33 +145,27 @@ export default function ContextMenuReact() {
   const doesAttributeTypeExist = (type) => {
     // return true if any other attribute type node exist but not the current type
     return nodes.some(
-      (n) => n.parentNode === rightClickNode.id && n.data.type === type
+      (n) => n.parentNode === selectedNode.id && n.data.type === type
     )
   }
 
   const isAttributeTypeSelectDisabled = (type) => {
     // atleast one attribute type must exist
-    if (rightClickNode) {
+    if (selectedNode) {
       const attributeTypeNodes = nodes.filter(
         (n) =>
-          n.parentNode === rightClickNode.id && n.type === 'AttributeTypeNode'
+          n.parentNode === selectedNode.id && n.type === 'AttributeTypeNode'
       )
       if (attributeTypeNodes.length === 0) {
         return false
       }
 
-      return rightClickNode.type === 'AttributeNode' &&
+      return selectedNode.type === 'AttributeNode' &&
         doesAttributeTypeExist(type)
         ? false
         : true
     }
   }
-
-  useEffect(() => {
-    // change selected node
-    const selectedNode = nodes.find((n) => n.selected)
-    setRightClickNode(selectedNode)
-  }, [nodes])
 
   // right click on canvas
   const createTableItem = <Item onClick={handleCreateTable}>Create Table</Item>
@@ -229,19 +225,15 @@ export default function ContextMenuReact() {
   )
 
   return (
-    <div>
-      <Menu id={MENU_ID} theme="dark">
-        {!rightClickNode && createTableItem}
-        {rightClickNode &&
-          rightClickNode.type === 'TableNode' &&
-          createAttributeItem}
-        {rightClickNode &&
-          rightClickNode.type === 'AttributeNode' &&
-          createAttributeConstraintItem}
-        {rightClickNode &&
-          rightClickNode.type === 'AttributeNode' &&
-          createAttributeTypeItem}
-      </Menu>
-    </div>
+    <Menu id={MENU_ID} theme="dark">
+      {!selectedNode && createTableItem}
+      {selectedNode && selectedNode.type === 'TableNode' && createAttributeItem}
+      {selectedNode &&
+        selectedNode.type === 'AttributeNode' &&
+        createAttributeConstraintItem}
+      {selectedNode &&
+        selectedNode.type === 'AttributeNode' &&
+        createAttributeTypeItem}
+    </Menu>
   )
 }

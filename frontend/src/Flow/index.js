@@ -1,4 +1,4 @@
-import { useRef, useCallback, useState } from 'react'
+import { useRef, useState } from 'react'
 import ReactFlow, { Background, Controls, ReactFlowProvider } from 'reactflow'
 import 'reactflow/dist/style.css'
 import { Button, Badge, Modal, Input } from '@mantine/core'
@@ -66,28 +66,11 @@ function Flow() {
     style: connectionLineStyle,
   }
 
-  const onDragOver = useCallback((event) => {
-    event.preventDefault()
-    event.dataTransfer.dropEffect = 'move'
-  }, [])
-
-  function displayMenu(e) {
+  const displayMenu = (e) => {
     show({
       id: 'main-menu',
       event: e,
     })
-  }
-
-  const handleClick = (e) => {
-    if (e.target.className === 'react-flow__pane') {
-      const newNodes = nodes.map((node) => {
-        node.data.selected = false
-        node.style = { border: 'none' }
-
-        return node
-      })
-      onNodesChange(newNodes)
-    }
   }
 
   const exportData = async () => {
@@ -128,8 +111,7 @@ function Flow() {
     setModalOpen(false)
   }
 
-  // on node click, set the selected node
-  const onNodeClick = (e, node) => {
+  const onNodeMouseEnter = (e, node) => {
     e.stopPropagation()
     setSelectedNode(node)
   }
@@ -151,21 +133,20 @@ function Flow() {
   }
 
   return (
-    <ReactFlowProvider onClick={handleClick}>
+    <ReactFlowProvider>
       <ContextMenuReact />
 
       <ReactFlow
         onInit={setRfInstance}
-        onClick={handleClick}
-        onNodeClick={onNodeClick}
+        onNodeMouseEnter={onNodeMouseEnter}
         onContextMenu={displayMenu}
+        onPaneMouseEnter={() => setSelectedNode(null)}
         ref={reactFlowWrapper}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        onDragOver={onDragOver}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         proOptions={{ hideAttribution: true }}
