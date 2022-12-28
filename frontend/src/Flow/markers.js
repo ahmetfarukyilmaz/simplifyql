@@ -44,8 +44,8 @@ export const markers = (
         refX="0"
         refY="0"
         markerUnits="strokeWidth"
-        markerWidth="10"
-        markerHeight="10"
+        markerWidth="5"
+        markerHeight="5"
         orient="auto"
       >
         <path d="M 0,0 L 0,10" fill="none" stroke="black" strokeWidth="1" />

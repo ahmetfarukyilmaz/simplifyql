@@ -63,7 +63,7 @@ function Flow() {
   }
 
   const defaultEdgeOptions = {
-    style: connectionLineStyle,
+    style: { stroke: 'black', strokeWidth: 6 },
   }
 
   const displayMenu = (e) => {
