@@ -2,7 +2,7 @@ export const markers = (
   <svg>
     <defs>
       <marker
-        id="edge-null"
+        id="null"
         viewBox="-5 -5 10 10"
         refX="0"
         refY="0"
@@ -21,13 +21,13 @@ export const markers = (
         />
       </marker>
       <marker
-        id="edge-many"
+        id="source-many"
         viewBox="-5 -5 10 10"
         refX="0"
         refY="0"
         markerUnits="strokeWidth"
-        markerWidth="10"
-        markerHeight="10"
+        markerWidth="5"
+        markerHeight="5"
         orient="auto"
       >
         <path
@@ -37,9 +37,26 @@ export const markers = (
           strokeWidth="1"
         />
       </marker>
+      <marker
+        id="target-many"
+        viewBox="-5 -5 10 10"
+        refX="0"
+        refY="0"
+        markerUnits="strokeWidth"
+        markerWidth="5"
+        markerHeight="5"
+        orient="auto"
+      >
+        <path
+          d="M 0,0 m 5,-5 L -5,0 L 5,5"
+          fill="none"
+          stroke="black"
+          strokeWidth="1"
+        />
+      </marker>
 
       <marker
-        id="edge-one"
+        id="one"
         viewBox="-5 -5 10 10"
         refX="0"
         refY="0"

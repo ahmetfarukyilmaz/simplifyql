@@ -78,8 +78,8 @@ const useStore = create((set, get) => ({
           ...connection,
           id: get().getEdgeId(),
           type: "floating",
-          markerEnd: "edge-one",
-          markerStart: "edge-one",
+          markerEnd: "one",
+          markerStart: "one",
           animated: true,
         },
 
@@ -98,6 +98,7 @@ const useStore = create((set, get) => ({
       edges: edges,
     });
   },
+
   disableEdgeAnimations: (value) => {
     set({
       edges: get().edges.map((edge) => {

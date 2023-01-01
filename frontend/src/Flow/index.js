@@ -6,6 +6,7 @@ import "reactflow/dist/style.css";
 import { Button, Badge, Modal, Input, Switch } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import ContextMenuReact from "components/ContextMenuReact";
+import RelationshipMenu from "components/RelationshipMenu";
 import CustomConnectionLine from "edges/CustomConnectionLine";
 import SimpleFloatingEdge from "edges/SimpleFloatingEdge";
 import {
@@ -60,7 +61,7 @@ function Flow() {
   } = useStore(selector, shallow);
 
   const { show } = useContextMenu({
-    id: "menu-id",
+    id: "main-menu",
   });
 
   const connectionLineStyle = {
@@ -69,12 +70,11 @@ function Flow() {
   };
 
   const defaultEdgeOptions = {
-    style: { stroke: "black", strokeWidth: 6 },
+    style: { stroke: "black", strokeWidth: 3 },
   };
 
   const displayMenu = (e) => {
     show({
-      id: "main-menu",
       event: e,
     });
   };
@@ -141,6 +141,7 @@ function Flow() {
   return (
     <ReactFlowProvider>
       <ContextMenuReact />
+      <RelationshipMenu />
 
       <ReactFlow
         onInit={setRfInstance}

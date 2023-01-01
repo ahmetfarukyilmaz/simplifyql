@@ -86,7 +86,7 @@ function TableNode(props) {
       <Handle style={handleStyle} position="left" id="d" />
       <div
         style={{
-          margin: "10px",
+          margin: "3px",
         }}
       >
         <Paper
