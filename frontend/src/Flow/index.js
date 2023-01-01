@@ -161,7 +161,7 @@ function Flow() {
         connectionLineComponent={CustomConnectionLine}
         defaultEdgeOptions={defaultEdgeOptions}
       >
-        <Background />
+        <Background size={2} />
         <Controls />
 
         {markers}
