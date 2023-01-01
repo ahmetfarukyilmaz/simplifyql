@@ -1,7 +1,7 @@
-import { useCallback } from 'react'
-import { useStore, getBezierPath } from 'reactflow'
+import { useCallback } from "react";
+import { useStore, getBezierPath } from "reactflow";
 
-import { getEdgeParams } from './utils.js'
+import { getEdgeParams } from "./utils.js";
 
 function SimpleFloatingEdge({
   id,
@@ -13,19 +13,19 @@ function SimpleFloatingEdge({
 }) {
   const sourceNode = useStore(
     useCallback((store) => store.nodeInternals.get(source), [source])
-  )
+  );
   const targetNode = useStore(
     useCallback((store) => store.nodeInternals.get(target), [target])
-  )
+  );
 
   if (!sourceNode || !targetNode) {
-    return null
+    return null;
   }
 
   const { sx, sy, tx, ty, sourcePos, targetPos } = getEdgeParams(
     sourceNode,
     targetNode
-  )
+  );
 
   const [edgePath] = getBezierPath({
     sourceX: sx,
@@ -34,7 +34,7 @@ function SimpleFloatingEdge({
     targetPosition: targetPos,
     targetX: tx,
     targetY: ty,
-  })
+  });
 
   return (
     <path
@@ -46,7 +46,7 @@ function SimpleFloatingEdge({
       markerStart={markerStart}
       style={style}
     />
-  )
+  );
 }
 
-export default SimpleFloatingEdge
+export default SimpleFloatingEdge;

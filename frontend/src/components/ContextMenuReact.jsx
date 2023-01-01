@@ -1,9 +1,10 @@
-import { Menu, Item, Submenu } from 'react-contexify'
-import shallow from 'zustand/shallow'
-import useStore from 'store/store'
-import 'react-contexify/dist/ReactContexify.css'
+import { Menu, Item, Submenu } from "react-contexify";
+import "react-contexify/dist/ReactContexify.css";
 
-const MENU_ID = 'main-menu'
+import useStore from "store/store";
+import shallow from "zustand/shallow";
+
+const MENU_ID = "main-menu";
 
 const selector = (state) => ({
   addNode: state.addNode,
@@ -11,38 +12,38 @@ const selector = (state) => ({
   nodes: state.nodes,
   onNodesChange: state.onNodesChange,
   selectedNode: state.selectedNode,
-})
+});
 
 export default function ContextMenuReact() {
   const { addNode, getId, nodes, onNodesChange, selectedNode } = useStore(
     selector,
     shallow
-  )
+  );
 
   function handleCreateTable(e) {
-    const x = e.event.clientX
-    const y = e.event.clientY
+    const x = e.event.clientX;
+    const y = e.event.clientY;
     const newNode = {
       id: getId(),
-      type: 'TableNode',
+      type: "TableNode",
       position: { x, y },
-      data: { label: 'Table' },
+      data: { label: "Table" },
       hidden: false,
-    }
-    addNode(newNode)
+    };
+    addNode(newNode);
   }
 
   const handleCreateAttribute = () => {
     const newNode = {
       id: getId(),
-      type: 'AttributeNode',
+      type: "AttributeNode",
       parentNode: selectedNode.id,
-      extent: 'parent',
+      extent: "parent",
       position: { x: 0, y: 0 },
       draggable: false,
       hidden: false,
       data: {
-        label: 'Attribute',
+        label: "Attribute",
         constraints: {
           primary_key: false,
           unique: false,
@@ -50,190 +51,190 @@ export default function ContextMenuReact() {
           index: false,
         },
       },
-    }
-    addNode(newNode)
-  }
+    };
+    addNode(newNode);
+  };
 
   const handleCreateAttributeType = (type) => {
     // for each attribute node, only one attribute type can be exist
     // so if the attribute type already exist, then remove the node
     if (selectedNode.data.type === type) {
-      selectedNode.data.type = ''
+      selectedNode.data.type = "";
       const nodeToRemove = nodes.find(
         (n) => n.parentNode === selectedNode.id && n.data.type === type
-      )
-      const index = nodes.indexOf(nodeToRemove)
-      nodes.splice(index, 1)
-      onNodesChange(nodes)
+      );
+      const index = nodes.indexOf(nodeToRemove);
+      nodes.splice(index, 1);
+      onNodesChange(nodes);
     }
     // if the attribute type does not exist, then create the node
     else {
       const newNode = {
         id: getId(),
-        type: 'AttributeTypeNode',
+        type: "AttributeTypeNode",
         parentNode: selectedNode.id,
-        extent: 'parent',
+        extent: "parent",
         position: { x: 0, y: 0 },
         draggable: false,
         hidden: false,
         data: {
-          label: 'Attribute Type',
+          label: "Attribute Type",
           type: type,
         },
-      }
+      };
 
-      selectedNode.data.type = type
+      selectedNode.data.type = type;
 
-      addNode(newNode)
+      addNode(newNode);
     }
-  }
+  };
 
   const handleCreateAttributeConstraint = (constraint) => {
     // check if attribute constraint already true in constraints object
     if (selectedNode.data.constraints[constraint]) {
       // make constraint false and remove the node
-      selectedNode.data.constraints[constraint] = false
+      selectedNode.data.constraints[constraint] = false;
       const nodeToRemove = nodes.find(
         (n) => n.parentNode === selectedNode.id && n.data.name === constraint
-      )
-      const index = nodes.indexOf(nodeToRemove)
-      nodes.splice(index, 1)
-      onNodesChange(nodes)
+      );
+      const index = nodes.indexOf(nodeToRemove);
+      nodes.splice(index, 1);
+      onNodesChange(nodes);
     } else {
       const newNode = {
         id: getId(),
-        type: 'AttributeConstraintNode',
+        type: "AttributeConstraintNode",
         parentNode: selectedNode.id,
-        extent: 'parent',
+        extent: "parent",
         position: { x: 0, y: 0 },
         draggable: false,
         hidden: false,
         data: {
-          label: 'Attribute Constraint',
+          label: "Attribute Constraint",
           name: constraint,
         },
-      }
+      };
 
-      selectedNode.data.constraints[constraint] = true
+      selectedNode.data.constraints[constraint] = true;
 
-      addNode(newNode)
+      addNode(newNode);
     }
-  }
+  };
 
   const checkmarkForConstraint = (constraint) => {
     if (
       selectedNode &&
-      selectedNode.type === 'AttributeNode' &&
+      selectedNode.type === "AttributeNode" &&
       selectedNode.data.constraints[constraint]
     ) {
-      return '✓'
+      return "✓";
     }
-    return ''
-  }
+    return "";
+  };
 
   const checkmarkForType = (type) => {
     if (
       selectedNode &&
-      selectedNode.type === 'AttributeNode' &&
+      selectedNode.type === "AttributeNode" &&
       selectedNode.data.type === type
     ) {
-      return '✓'
+      return "✓";
     }
-    return ''
-  }
+    return "";
+  };
 
   const doesAttributeTypeExist = (type) => {
     // return true if any other attribute type node exist but not the current type
     return nodes.some(
       (n) => n.parentNode === selectedNode.id && n.data.type === type
-    )
-  }
+    );
+  };
 
   const isAttributeTypeSelectDisabled = (type) => {
     // atleast one attribute type must exist
     if (selectedNode) {
       const attributeTypeNodes = nodes.filter(
         (n) =>
-          n.parentNode === selectedNode.id && n.type === 'AttributeTypeNode'
-      )
+          n.parentNode === selectedNode.id && n.type === "AttributeTypeNode"
+      );
       if (attributeTypeNodes.length === 0) {
-        return false
+        return false;
       }
 
-      return selectedNode.type === 'AttributeNode' &&
+      return selectedNode.type === "AttributeNode" &&
         doesAttributeTypeExist(type)
         ? false
-        : true
+        : true;
     }
-  }
+  };
 
   // right click on canvas
-  const createTableItem = <Item onClick={handleCreateTable}>Create Table</Item>
+  const createTableItem = <Item onClick={handleCreateTable}>Create Table</Item>;
 
   // right click on TableNode
   const createAttributeItem = (
     <Item onClick={handleCreateAttribute}>Create Attribute</Item>
-  )
+  );
 
   // right click on AttributeNode
   const createAttributeConstraintItem = (
     <Submenu label="Attribute Constraints">
-      <Item onClick={() => handleCreateAttributeConstraint('nullable')}>
-        NULLABLE {checkmarkForConstraint('nullable')}
+      <Item onClick={() => handleCreateAttributeConstraint("nullable")}>
+        NULLABLE {checkmarkForConstraint("nullable")}
       </Item>
-      <Item onClick={() => handleCreateAttributeConstraint('unique')}>
-        UNIQUE {checkmarkForConstraint('unique')}
+      <Item onClick={() => handleCreateAttributeConstraint("unique")}>
+        UNIQUE {checkmarkForConstraint("unique")}
       </Item>
-      <Item onClick={() => handleCreateAttributeConstraint('index')}>
-        INDEX {checkmarkForConstraint('index')}
+      <Item onClick={() => handleCreateAttributeConstraint("index")}>
+        INDEX {checkmarkForConstraint("index")}
       </Item>
-      <Item onClick={() => handleCreateAttributeConstraint('primary_key')}>
-        PRIMARY KEY {checkmarkForConstraint('primary_key')}
+      <Item onClick={() => handleCreateAttributeConstraint("primary_key")}>
+        PRIMARY KEY {checkmarkForConstraint("primary_key")}
       </Item>
     </Submenu>
-  )
+  );
 
   // right click on AttributeNode
 
   const createAttributeTypeItem = (
     <Submenu label="Attribute Type">
       <Item
-        disabled={isAttributeTypeSelectDisabled('varchar')}
-        onClick={() => handleCreateAttributeType('varchar')}
+        disabled={isAttributeTypeSelectDisabled("varchar")}
+        onClick={() => handleCreateAttributeType("varchar")}
       >
-        VARCHAR {checkmarkForType('varchar')}
+        VARCHAR {checkmarkForType("varchar")}
       </Item>
       <Item
-        disabled={isAttributeTypeSelectDisabled('integer')}
-        onClick={() => handleCreateAttributeType('integer')}
+        disabled={isAttributeTypeSelectDisabled("integer")}
+        onClick={() => handleCreateAttributeType("integer")}
       >
-        INTEGER {checkmarkForType('integer')}
+        INTEGER {checkmarkForType("integer")}
       </Item>
       <Item
-        disabled={isAttributeTypeSelectDisabled('boolean')}
-        onClick={() => handleCreateAttributeType('boolean')}
+        disabled={isAttributeTypeSelectDisabled("boolean")}
+        onClick={() => handleCreateAttributeType("boolean")}
       >
-        BOOLEAN {checkmarkForType('boolean')}
+        BOOLEAN {checkmarkForType("boolean")}
       </Item>
       <Item
-        disabled={isAttributeTypeSelectDisabled('text')}
-        onClick={() => handleCreateAttributeType('text')}
+        disabled={isAttributeTypeSelectDisabled("text")}
+        onClick={() => handleCreateAttributeType("text")}
       >
-        TEXT {checkmarkForType('text')}
+        TEXT {checkmarkForType("text")}
       </Item>
     </Submenu>
-  )
+  );
 
   return (
     <Menu id={MENU_ID} theme="dark">
       {!selectedNode && createTableItem}
-      {selectedNode && selectedNode.type === 'TableNode' && createAttributeItem}
+      {selectedNode && selectedNode.type === "TableNode" && createAttributeItem}
       {selectedNode &&
-        selectedNode.type === 'AttributeNode' &&
+        selectedNode.type === "AttributeNode" &&
         createAttributeConstraintItem}
       {selectedNode &&
-        selectedNode.type === 'AttributeNode' &&
+        selectedNode.type === "AttributeNode" &&
         createAttributeTypeItem}
     </Menu>
-  )
+  );
 }

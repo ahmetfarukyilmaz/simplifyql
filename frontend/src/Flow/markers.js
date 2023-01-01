@@ -53,4 +53,4 @@ export const markers = (
       </marker>
     </defs>
   </svg>
-)
+);

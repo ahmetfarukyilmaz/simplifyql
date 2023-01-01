@@ -36,7 +36,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "format": "prettier --write \"**/*.{js,jsx,tsx,json,css}\""
   },
   "eslintConfig": {
     "extends": [
@@ -57,6 +58,8 @@
     ]
   },
   "devDependencies": {
-    "dotenv": "^16.0.3"
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "dotenv": "^16.0.3",
+    "eslint-plugin-simple-import-sort": "^8.0.0"
   }
 }

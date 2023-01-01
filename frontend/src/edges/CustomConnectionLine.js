@@ -1,4 +1,4 @@
-import { getBezierPath } from 'reactflow'
+import { getBezierPath } from "reactflow";
 
 function CustomConnectionLine({ fromX, fromY, toX, toY, connectionLineStyle }) {
   const [edgePath] = getBezierPath({
@@ -6,7 +6,7 @@ function CustomConnectionLine({ fromX, fromY, toX, toY, connectionLineStyle }) {
     sourceY: fromY,
     targetX: toX,
     targetY: toY,
-  })
+  });
 
   return (
     <g>
@@ -20,7 +20,7 @@ function CustomConnectionLine({ fromX, fromY, toX, toY, connectionLineStyle }) {
         strokeWidth={3}
       />
     </g>
-  )
+  );
 }
 
-export default CustomConnectionLine
+export default CustomConnectionLine;

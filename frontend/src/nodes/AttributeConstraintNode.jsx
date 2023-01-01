@@ -1,37 +1,39 @@
-import { useEffect, useState } from 'react'
-import { Badge } from '@mantine/core'
-import { ATTRIBUTE_CONSTRAINT_HEIGHT } from 'constants'
+import { useEffect, useState } from "react";
+
+import { Badge } from "@mantine/core";
+import { ATTRIBUTE_CONSTRAINT_HEIGHT } from "constants";
+
 const AttributeConstraintNode = ({ data }) => {
-  const [color, setColor] = useState('red')
+  const [color, setColor] = useState("red");
 
   const colorPicker = () => {
     switch (data.name) {
-      case 'primary_key':
-        setColor('red')
-        break
-      case 'unique':
-        setColor('blue')
-        break
-      case 'nullable':
-        setColor('green')
-        break
-      case 'index':
-        setColor('yellow')
-        break
+      case "primary_key":
+        setColor("red");
+        break;
+      case "unique":
+        setColor("blue");
+        break;
+      case "nullable":
+        setColor("green");
+        break;
+      case "index":
+        setColor("yellow");
+        break;
       default:
-        setColor('purple')
+        setColor("purple");
     }
-  }
+  };
 
   useEffect(() => {
-    colorPicker()
-  }, [])
+    colorPicker();
+  }, []);
 
   return (
     <Badge
       sx={{
-        marginTop: '10px',
-        marginBottom: '10px',
+        marginTop: "10px",
+        marginBottom: "10px",
         height: ATTRIBUTE_CONSTRAINT_HEIGHT,
       }}
       color={color}
@@ -40,7 +42,7 @@ const AttributeConstraintNode = ({ data }) => {
     >
       {data.name}
     </Badge>
-  )
-}
+  );
+};
 
-export default AttributeConstraintNode
+export default AttributeConstraintNode;

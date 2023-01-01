@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   Header as MantineHeader,
   Group,
@@ -6,46 +8,45 @@ import {
   UnstyledButton,
   Text,
   createStyles,
-} from '@mantine/core'
-import { IconChevronDown, IconLogout } from '@tabler/icons'
-import { useState } from 'react'
+} from "@mantine/core";
+import { IconChevronDown, IconLogout } from "@tabler/icons";
 
 const useStyles = createStyles((theme) => ({
   user: {
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.black,
+    color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
     padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
     borderRadius: theme.radius.sm,
-    transition: 'background-color 100ms ease',
+    transition: "background-color 100ms ease",
 
-    '&:hover': {
+    "&:hover": {
       backgroundColor:
-        theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+        theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
     },
 
-    [theme.fn.smallerThan('xs')]: {
-      display: 'none',
+    [theme.fn.smallerThan("xs")]: {
+      display: "none",
     },
   },
 
   userActive: {
     backgroundColor:
-      theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
+      theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
   },
-}))
+}));
 
 export default function Header() {
-  const { classes, cx } = useStyles()
+  const { classes, cx } = useStyles();
 
-  const [userMenuOpened, setUserMenuOpened] = useState(false)
+  const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   const onLogout = () => {
-    localStorage.removeItem('token')
-    window.location.href = '/login'
-  }
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
 
   return (
     <MantineHeader height={80} p="xs">
-      <Group sx={{ height: '100%' }} px={20} position="apart">
+      <Group sx={{ height: "100%" }} px={20} position="apart">
         <div>SimplifyQL</div>
         <Menu
           width={200}
@@ -78,5 +79,5 @@ export default function Header() {
         </Menu>
       </Group>
     </MantineHeader>
-  )
+  );
 }

@@ -1,7 +1,8 @@
-import create from 'zustand'
-import { addEdge, applyNodeChanges, applyEdgeChanges } from 'reactflow'
+import { addEdge, applyNodeChanges, applyEdgeChanges } from "reactflow";
 
-import { initialEdges, initialNodes } from './nodes'
+import create from "zustand";
+
+import { initialEdges, initialNodes } from "./nodes";
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create((set, get) => ({
@@ -14,43 +15,43 @@ const useStore = create((set, get) => ({
   addNode: (node) => {
     set({
       nodes: [...get().nodes, node],
-    })
+    });
   },
   deleteNode: (node) => {
     set({
       nodes: get().nodes.filter((n) => n.id !== node.id),
-    })
+    });
   },
   hideNodes: (nodes) => {
     set({
       nodes: get().nodes.map((n) => {
         if (nodes.includes(n)) {
-          n.hidden = true
+          n.hidden = true;
         }
-        return n
+        return n;
       }),
-    })
+    });
   },
   showNodes: (nodes) => {
     set({
       nodes: get().nodes.map((n) => {
         if (nodes.includes(n)) {
-          n.hidden = false
+          n.hidden = false;
         }
-        return n
+        return n;
       }),
-    })
+    });
   },
 
   onNodesChange: (changes) => {
     set({
       nodes: applyNodeChanges(changes, get().nodes),
-    })
+    });
   },
   onEdgesChange: (changes) => {
     set({
       edges: applyEdgeChanges(changes, get().edges),
-    })
+    });
   },
   onConnect: (connection) => {
     // if there is already an edge between the two nodes, don't create a new one
@@ -63,12 +64,12 @@ const useStore = create((set, get) => ({
             edge.target === connection.target)
       )
     ) {
-      return
+      return;
     }
 
     // dont create an edge if the source and target are the same
     if (connection.source === connection.target) {
-      return
+      return;
     }
 
     set({
@@ -76,27 +77,35 @@ const useStore = create((set, get) => ({
         {
           ...connection,
           id: get().getEdgeId(),
-          type: 'floating',
-          markerEnd: 'edge-one',
-          markerStart: 'edge-one',
+          type: "floating",
+          markerEnd: "edge-one",
+          markerStart: "edge-one",
           animated: true,
         },
 
         get().edges
       ),
-    })
+    });
   },
   selectedNode: null,
   setSelectedNode: (node) => {
     set({
       selectedNode: node,
-    })
+    });
   },
   setEdges: (edges) => {
     set({
       edges: edges,
-    })
+    });
   },
-}))
+  disableEdgeAnimations: (value) => {
+    set({
+      edges: get().edges.map((edge) => {
+        edge.animated = !value;
+        return edge;
+      }),
+    });
+  },
+}));
 
-export default useStore
+export default useStore;

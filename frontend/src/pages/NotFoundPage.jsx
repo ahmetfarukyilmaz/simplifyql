@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import {
   createStyles,
   Container,
@@ -5,9 +7,9 @@ import {
   Text,
   Button,
   Group,
-} from '@mantine/core'
-import { Illustration } from 'static/Illustration'
-import { Link } from 'react-router-dom'
+} from "@mantine/core";
+import { Illustration } from "static/Illustration";
+
 const useStyles = createStyles((theme) => ({
   root: {
     paddingTop: 80,
@@ -15,11 +17,11 @@ const useStyles = createStyles((theme) => ({
   },
 
   inner: {
-    position: 'relative',
+    position: "relative",
   },
 
   image: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     right: 0,
     left: 0,
@@ -29,35 +31,35 @@ const useStyles = createStyles((theme) => ({
 
   content: {
     paddingTop: 220,
-    position: 'relative',
+    position: "relative",
     zIndex: 1,
 
-    [theme.fn.smallerThan('sm')]: {
+    [theme.fn.smallerThan("sm")]: {
       paddingTop: 120,
     },
   },
 
   title: {
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    textAlign: 'center',
+    textAlign: "center",
     fontWeight: 900,
     fontSize: 38,
 
-    [theme.fn.smallerThan('sm')]: {
+    [theme.fn.smallerThan("sm")]: {
       fontSize: 32,
     },
   },
 
   description: {
     maxWidth: 540,
-    margin: 'auto',
+    margin: "auto",
     marginTop: theme.spacing.xl,
     marginBottom: theme.spacing.xl * 1.5,
   },
-}))
+}));
 
 export function NotFoundPage() {
-  const { classes } = useStyles()
+  const { classes } = useStyles();
 
   return (
     <Container className={classes.root}>
@@ -82,5 +84,5 @@ export function NotFoundPage() {
         </div>
       </div>
     </Container>
-  )
+  );
 }

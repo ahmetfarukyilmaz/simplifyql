@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import {
   Paper,
   createStyles,
@@ -7,80 +9,79 @@ import {
   Title,
   Text,
   Anchor,
-} from '@mantine/core'
-import { showNotification } from '@mantine/notifications'
-import { useForm } from '@mantine/form'
-import { Link } from 'react-router-dom'
-import request from 'utils/request'
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
+import request from "utils/request";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
     minHeight: 900,
-    backgroundSize: 'cover',
+    backgroundSize: "cover",
     backgroundImage:
-      'url(https://images.unsplash.com/photo-1484242857719-4b9144542727?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80)',
+      "url(https://images.unsplash.com/photo-1484242857719-4b9144542727?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80)",
   },
 
   form: {
     borderRight: `1px solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[3]
+      theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[3]
     }`,
     minHeight: 900,
     maxWidth: 450,
     paddingTop: 80,
 
     [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-      maxWidth: '100%',
+      maxWidth: "100%",
     },
   },
 
   title: {
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
   },
 
   logo: {
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
     width: 120,
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    display: "block",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
-}))
+}));
 
 export function LoginPage() {
-  if (localStorage.getItem('token')) {
-    window.location.href = '/'
+  if (localStorage.getItem("token")) {
+    window.location.href = "/";
   }
-  const { classes } = useStyles()
+  const { classes } = useStyles();
 
   const form = useForm({
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
 
     validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
+      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
       password: (val) =>
-        val.length < 6 ? 'Password should include at least 6 characters' : null,
+        val.length < 6 ? "Password should include at least 6 characters" : null,
     },
-  })
+  });
 
   const onSubmit = async (values) => {
     try {
-      const response = await request.post('/users/login', values)
-      const token = response.data.auth_token
-      localStorage.setItem('token', token)
-      window.location.href = '/'
+      const response = await request.post("/users/login", values);
+      const token = response.data.auth_token;
+      localStorage.setItem("token", token);
+      window.location.href = "/";
     } catch (error) {
       showNotification({
-        title: 'Error',
-        message: error.response.data.detail || 'Something went wrong',
-        color: 'red',
-      })
+        title: "Error",
+        message: error.response.data.detail || "Something went wrong",
+        color: "red",
+      });
     }
-  }
+  };
 
   return (
     <div className={classes.wrapper}>
@@ -100,18 +101,18 @@ export function LoginPage() {
             required
             value={form.values.email}
             onChange={(event) =>
-              form.setFieldValue('email', event.currentTarget.value)
+              form.setFieldValue("email", event.currentTarget.value)
             }
             label="Email address"
             placeholder="hello@gmail.com"
             size="md"
-            error={form.errors.email && 'Invalid email'}
+            error={form.errors.email && "Invalid email"}
           />
           <PasswordInput
             required
             value={form.values.password}
             onChange={(event) =>
-              form.setFieldValue('password', event.currentTarget.value)
+              form.setFieldValue("password", event.currentTarget.value)
             }
             label="Password"
             placeholder="Your password"
@@ -119,7 +120,7 @@ export function LoginPage() {
             size="md"
             error={
               form.errors.password &&
-              'Password should include at least 6 characters'
+              "Password should include at least 6 characters"
             }
           />
           <Button fullWidth mt="xl" size="md" type="submit">
@@ -128,12 +129,12 @@ export function LoginPage() {
         </form>
 
         <Text align="center" mt="md">
-          Don&apos;t have an account?{' '}
+          Don&apos;t have an account?{" "}
           <Anchor component={Link} to="/register">
             Register
           </Anchor>
         </Text>
       </Paper>
     </div>
-  )
+  );
 }
