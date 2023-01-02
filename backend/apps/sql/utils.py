@@ -175,18 +175,18 @@ def generate_one_to_one_relationship(source_table, tables):
                 target_tables.append(table)
                 break
 
+    # get the source tables primary key
+    for attribute in source_table.attributes:
+        if attribute.constraints.primary_key:
+            source_primary_key = attribute.name
+            break
+
     # add foreign keys to the source table
     sql_code = ""
     for target_table in target_tables:
-        # get the target table primary key type
-        for attribute in target_table.attributes:
-            if attribute.constraints.primary_key:
-                # first create a column for the foreign key
-                sql_code += (
-                    f'ALTER TABLE "{source_table.name}" ADD COLUMN "{target_table.name}_id" {attribute.type} UNIQUE;\n'
-                )
-                # then add the foreign key
-                sql_code += f'ALTER TABLE "{source_table.name}" ADD FOREIGN KEY ("{target_table.name}_id") REFERENCES "{target_table.name}" ("{attribute.name}");\n\n'
+        # first create a new column in the target table
+        sql_code += f'ALTER TABLE "{target_table.name}" ADD "{source_table.name}_id" {attribute.type} UNIQUE;\n'
+        sql_code += f'ALTER TABLE "{target_table.name}" ADD FOREIGN KEY ("{source_table.name}_id") REFERENCES "{source_table.name}" ("{source_primary_key}");\n'
 
     return sql_code
 
@@ -201,18 +201,18 @@ def generate_one_to_many_relationship(source_table, tables):
                 target_tables.append(table)
                 break
 
+    # get source table primary key
+    for attribute in source_table.attributes:
+        if attribute.constraints.primary_key:
+            source_primary_key = attribute.name
+            break
+
     # add foreign keys to the target tables
     sql_code = ""
     for target_table in target_tables:
-        # get the source table primary key type
-        for attribute in source_table.attributes:
-            if attribute.constraints.primary_key:
-                # first create a column for the foreign key
-                sql_code += (
-                    f'ALTER TABLE "{source_table.name}" ADD COLUMN "{target_table.name}_id" {attribute.type};\n'
-                )
-                # then add the foreign key
-                sql_code += f'ALTER TABLE "{source_table.name}" ADD FOREIGN KEY ("{target_table.name}_id") REFERENCES "{target_table.name}" ("{attribute.name}");\n\n'
+        # first create a new column in the target table
+        sql_code += f'ALTER TABLE "{target_table.name}" ADD "{source_table.name}_id" {attribute.type};\n'
+        sql_code += f'ALTER TABLE "{target_table.name}" ADD FOREIGN KEY ("{source_table.name}_id") REFERENCES "{source_table.name}" ("{source_primary_key}");\n'
 
     return sql_code
 
@@ -279,11 +279,13 @@ def generate_sql_code(tables):
 
     for table in tables:
         sql_code += generate_many_to_many_relationship(table, tables)
-
-    for table in tables:
         sql_code += generate_one_to_one_relationship(table, tables)
-
-    for table in tables:
         sql_code += generate_one_to_many_relationship(table, tables)
+
+    # for table in tables:
+    #     sql_code += generate_one_to_one_relationship(table, tables)
+
+    # for table in tables:
+    #     sql_code += generate_one_to_many_relationship(table, tables)
 
     return sql_code
