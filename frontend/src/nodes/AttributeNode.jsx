@@ -44,7 +44,7 @@ function AttributeNode(props) {
   }, [nodes, props.id]);
 
   return (
-    <Paper sx={paperStyles} shadow="xs" radius="lg" bg="gray">
+    <Paper sx={paperStyles} shadow="xs" radius="lg" bg="#F8F9FA" withBorder>
       <TextInput
         value={attributeName}
         onChange={onInputChange}

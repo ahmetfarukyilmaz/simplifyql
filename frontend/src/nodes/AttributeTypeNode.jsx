@@ -17,7 +17,7 @@ const AttributeTypeNode = ({ data }) => {
           textAlign: "center",
           border: "none",
           outline: "none",
-          backgroundColor: "lightblue",
+          backgroundColor: "transparent",
           fontSize: "8px",
         }}
         type="text"
@@ -38,7 +38,7 @@ const AttributeTypeNode = ({ data }) => {
         width: "60px",
         height: "25px",
         borderRadius: "20px",
-        backgroundColor: "lightblue",
+        backgroundColor: "#D0BFFF",
         border: "1px solid transparent",
         marginTop: "10px",
       }}

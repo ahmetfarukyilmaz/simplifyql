@@ -1,6 +1,6 @@
 from ninja import Schema
 
-from .enums import AttributeType, NodeType
+from .enums import AttributeType, NodeType, RelationshipType
 
 
 class AttributeConstraintsSchema(Schema):
@@ -30,6 +30,7 @@ class TableSchema(Schema):
     id: str
     name: str
     attributes: list[AttributeSchema] = []
+    relationships: list[dict] = []
 
 
 class NodeSchema(Schema):
@@ -43,12 +44,26 @@ class NodeSchema(Schema):
     data: dict = None
 
 
+class EdgeSchema(Schema):
+    """
+    Schema that comes from the frontend
+    """
+
+    id: str
+    source: str
+    target: str
+    markerStart: str = None
+    markerEnd: str = None
+    data: dict = None
+    relationship: RelationshipType = None
+
+
 class SqlSchema(Schema):
     """
     Schema that comes from the frontend
     """
 
     nodes: list[NodeSchema] = None
-    edges: list[dict] = None
+    edges: list[EdgeSchema] = None
     name: str
     raw_data: dict = {}

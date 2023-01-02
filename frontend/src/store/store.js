@@ -81,6 +81,9 @@ const useStore = create((set, get) => ({
           markerEnd: "one",
           markerStart: "one",
           animated: true,
+          data: {
+            relationship: "one-one",
+          },
         },
 
         get().edges

@@ -17,3 +17,9 @@ class AttributeType(str, Enum):
     INTEGER = "integer"
     VARCHAR = "varchar"
     BOOLEAN = "boolean"
+
+
+class RelationshipType(str, Enum):
+    ONE_TO_ONE = "one-one"
+    ONE_TO_MANY = "one-many"
+    MANY_TO_MANY = "many-many"

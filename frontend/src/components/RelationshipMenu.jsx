@@ -20,6 +20,13 @@ export default function RelationshipMenu(props) {
     // update markerStart and markerEnd if they are not null
     if (markerStart) edge.markerStart = markerStart;
     if (markerEnd) edge.markerEnd = markerEnd;
+    // if marker contains "-" then get the string after "-"
+    if (markerStart.includes("-")) markerStart = markerStart.split("-")[1];
+    if (markerEnd.includes("-")) markerEnd = markerEnd.split("-")[1];
+    const relationship = `${markerStart}-${markerEnd}`;
+    // update the edges data.type
+    edge.data.relationship = relationship;
+
     setEdges([...edges]);
   };
 

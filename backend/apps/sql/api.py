@@ -4,7 +4,7 @@ from users.schema import ErrorSchema
 
 from .models import ErDiagram
 from .schema import SqlSchema
-from .utils import generate_sql_code, get_sql
+from .utils import generate_sql_code, get_relationships, initialize_edges, initialize_tables
 
 router = Router()
 UserModel = get_user_model()
@@ -18,12 +18,14 @@ def create_tables(request, data: SqlSchema):
         return 400, ErrorSchema(detail="Invalid credentials")
 
     nodes = data.nodes
-    # edges = data.edges
+    edges = data.edges
     name = data.name
-    raw_data = data.raw_data
-    ErDiagram.save_er_diagram(raw_data=raw_data, name=name, user=user)
+    # raw_data = data.raw_data
+    # ErDiagram.save_er_diagram(raw_data=raw_data, name=name, user=user)
+    edges = initialize_edges(edges)
+    tables = initialize_tables(nodes)
 
-    tables = get_sql(nodes)
+    tables = get_relationships(edges, tables)
     sql_code = generate_sql_code(tables)
     return sql_code
 

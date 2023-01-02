@@ -3,7 +3,6 @@ import { useState } from "react";
 import {
   Header as MantineHeader,
   Group,
-  Avatar,
   Menu,
   UnstyledButton,
   Text,
@@ -47,7 +46,8 @@ export default function Header() {
   return (
     <MantineHeader height={80} p="xs">
       <Group sx={{ height: "100%" }} px={20} position="apart">
-        <div>SimplifyQL</div>
+        <h3>SimplifyQL</h3>
+
         <Menu
           width={200}
           transition="pop-top-right"
