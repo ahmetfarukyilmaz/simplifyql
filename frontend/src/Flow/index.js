@@ -16,6 +16,8 @@ import {
   AttributeTypeNode,
 } from "nodes";
 import useStore from "store/store";
+import useEdgesStateSynced from "useEdgesStateSynced";
+import useNodesStateSynced from "useNodesStateSynced";
 import request from "utils/request";
 import shallow from "zustand/shallow";
 
@@ -63,6 +65,15 @@ function Flow() {
   const { show } = useContextMenu({
     id: "main-menu",
   });
+
+  const [nodesSync, onNodesChangeSync] = useNodesStateSynced(
+    nodes,
+    onNodesChange
+  );
+  const [edgesSync, onEdgesChangeSync] = useEdgesStateSynced(
+    edges,
+    onEdgesChange
+  );
 
   const connectionLineStyle = {
     strokeWidth: 3,
@@ -151,8 +162,8 @@ function Flow() {
         ref={reactFlowWrapper}
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+        onNodesChange={onNodesChangeSync}
+        onEdgesChange={onEdgesChangeSync}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}

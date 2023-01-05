@@ -1,5 +1,12 @@
-import { addEdge, applyNodeChanges, applyEdgeChanges } from "reactflow";
+import {
+  addEdge,
+  applyNodeChanges,
+  applyEdgeChanges,
+  onNodesDelete,
+} from "reactflow";
 
+import { edgesMap } from "useEdgesStateSynced";
+import { nodesMap } from "useNodesStateSynced";
 import create from "zustand";
 
 import { initialEdges, initialNodes } from "./nodes";
@@ -16,11 +23,13 @@ const useStore = create((set, get) => ({
     set({
       nodes: [...get().nodes, node],
     });
+    nodesMap.set(node.id, node);
   },
   deleteNode: (node) => {
     set({
       nodes: get().nodes.filter((n) => n.id !== node.id),
     });
+    nodesMap.set(node.id, node);
   },
   hideNodes: (nodes) => {
     set({
@@ -40,6 +49,11 @@ const useStore = create((set, get) => ({
         }
         return n;
       }),
+    });
+  },
+  setNodes: (nodes) => {
+    set({
+      nodes: nodes,
     });
   },
 

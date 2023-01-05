@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 
 import { Paper, TextInput } from "@mantine/core";
-import { useInputState } from "@mantine/hooks";
 import {
   ATTRIBUTE_HEIGHT,
   ATTRIBUTE_WIDTH,
@@ -10,7 +9,7 @@ import {
 import useStore from "store/store";
 import { UpdateAttributeConstraintNodePositions } from "utils/calculateNodePosition";
 import shallow from "zustand/shallow";
-
+import { nodesMap } from "useNodesStateSynced";
 const selector = (state) => ({
   nodes: state.nodes,
 });
@@ -27,14 +26,16 @@ const paperStyles = {
 };
 
 function AttributeNode(props) {
-  const [attributeName, setAttributeName] = useInputState(
-    props.data.name || ""
-  );
   const { nodes } = useStore(selector, shallow);
 
+  const node = nodes.find((n) => n.id === props.id);
+
   const onInputChange = (event) => {
-    setAttributeName(event.target.value);
-    props.data.name = event.target.value;
+    const newNode = {
+      ...node,
+      data: { ...node.data, name: event.target.value },
+    };
+    nodesMap.set(props.id, newNode);
   };
 
   useEffect(() => {
@@ -46,7 +47,7 @@ function AttributeNode(props) {
   return (
     <Paper sx={paperStyles} shadow="xs" radius="lg" bg="#F8F9FA" withBorder>
       <TextInput
-        value={attributeName}
+        value={node && node.data.name ? node.data.name : ""}
         onChange={onInputChange}
         placeholder="Attribute Name"
         required

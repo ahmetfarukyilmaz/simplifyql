@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Handle } from "reactflow";
-
+import { nodesMap } from "useNodesStateSynced";
 import {
   Paper,
   TextInput,
@@ -8,7 +8,6 @@ import {
   SimpleGrid,
   ActionIcon,
 } from "@mantine/core";
-import { useInputState } from "@mantine/hooks";
 import { IconArrowAutofitDown } from "@tabler/icons";
 import { TABLE_HEIGHT, TABLE_WIDTH, TABLE_CONTENT_MIN_HEIGHT } from "constants";
 import { AttributeNode } from "nodes";
@@ -21,6 +20,7 @@ const selector = (state) => ({
   hideNodes: state.hideNodes,
   showNodes: state.showNodes,
   selectedNode: state.selectedNode,
+  setNodes: state.setNodes,
 });
 
 const handleStyle = {
@@ -41,8 +41,8 @@ function TableNode(props) {
     shallow
   );
   const [childNodes, setChildNodes] = useState([]);
-  const [tableName, setTableName] = useInputState(props.data.name || "");
   const [opened, setOpened] = useState(true);
+  const node = nodes.find((n) => n.id === props.id);
 
   const findChildNodesRecursive = (nodeId) => {
     const childNodes = nodes.filter((n) => n.parentNode === nodeId);
@@ -67,8 +67,15 @@ function TableNode(props) {
   };
 
   const onInputChange = (event) => {
-    setTableName(event.target.value);
-    props.data.name = event.target.value;
+    const newNode = {
+      ...node,
+      data: {
+        ...node.data,
+        name: event.target.value,
+      },
+    };
+
+    nodesMap.set(props.id, newNode);
   };
 
   useEffect(() => {
@@ -105,7 +112,7 @@ function TableNode(props) {
           }}
         >
           <TextInput
-            value={tableName}
+            value={node && node.data.name ? node.data.name : ""}
             onChange={onInputChange}
             placeholder="Table Name"
             required
