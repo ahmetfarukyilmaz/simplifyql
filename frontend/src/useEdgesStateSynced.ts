@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import {
   Edge,
   applyEdgeChanges,
@@ -12,6 +12,13 @@ import {
 } from "reactflow";
 
 import ydoc from "./ydoc";
+import shallow from "zustand/shallow";
+import useStore from "store/store";
+const selector = (state) => ({
+  edges: state.edges,
+  setEdges: state.setEdges,
+  onNodesChange: state.onNodesChange,
+});
 
 // Please see the comments in useNodesStateSynced.ts.
 // This is the same thing but for edges.
@@ -25,7 +32,7 @@ const isEdgeRemoveChange = (change: EdgeChange): change is EdgeRemoveChange =>
   change.type === "remove";
 
 function useEdgesStateSynced(): [Edge[], OnEdgesChange, OnConnect] {
-  const [edges, setEdges] = useState<Edge[]>([]);
+  const { edges, setEdges } = useStore(selector, shallow);
 
   const onEdgesChange = useCallback((changes) => {
     const currentEdges = Array.from(edgesMap.values()).filter((e) => e);

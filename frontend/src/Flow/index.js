@@ -36,8 +36,6 @@ const edgeTypes = {
 const selector = (state) => ({
   nodes: state.nodes,
   edges: state.edges,
-  onNodesChange: state.onNodesChange,
-  onEdgesChange: state.onEdgesChange,
   onConnect: state.onConnect,
   setSelectedNode: state.setSelectedNode,
   selectedNode: state.selectedNode,
@@ -54,8 +52,6 @@ function Flow() {
   const {
     nodes,
     edges,
-    onNodesChange,
-    onEdgesChange,
     onConnect,
     selectedNode,
     setSelectedNode,
@@ -66,14 +62,8 @@ function Flow() {
     id: "main-menu",
   });
 
-  const [nodesSync, onNodesChangeSync] = useNodesStateSynced(
-    nodes,
-    onNodesChange
-  );
-  const [edgesSync, onEdgesChangeSync] = useEdgesStateSynced(
-    edges,
-    onEdgesChange
-  );
+  const [nodesSync, onNodesChangeSync] = useNodesStateSynced();
+  const [edgesSync, onEdgesChangeSync] = useEdgesStateSynced();
 
   const connectionLineStyle = {
     strokeWidth: 3,

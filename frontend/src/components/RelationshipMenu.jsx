@@ -1,6 +1,6 @@
 import { Menu, Item } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
-
+import { edgesMap } from "useEdgesStateSynced";
 import useStore from "store/store";
 import shallow from "zustand/shallow";
 
@@ -28,6 +28,7 @@ export default function RelationshipMenu(props) {
     edge.data.relationship = relationship;
 
     setEdges([...edges]);
+    edgesMap.set(edge.id, edge);
   };
 
   return (

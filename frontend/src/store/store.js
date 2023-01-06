@@ -1,9 +1,4 @@
-import {
-  addEdge,
-  applyNodeChanges,
-  applyEdgeChanges,
-  onNodesDelete,
-} from "reactflow";
+import { addEdge, applyNodeChanges, applyEdgeChanges } from "reactflow";
 
 import { edgesMap } from "useEdgesStateSynced";
 import { nodesMap } from "useNodesStateSynced";
@@ -108,6 +103,9 @@ const useStore = create((set, get) => ({
 
         get().edges
       ),
+    });
+    get().edges.forEach((edge) => {
+      edgesMap.set(edge.id, edge);
     });
   },
   selectedNode: null,
