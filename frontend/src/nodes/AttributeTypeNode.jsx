@@ -1,15 +1,47 @@
-import { useInputState } from "@mantine/hooks";
+import { useEffect } from "react";
+import { nodesMap } from "useNodesStateSynced";
+import shallow from "zustand/shallow";
+import useStore from "store/store";
+const selector = (state) => ({
+  nodes: state.nodes,
+});
+const AttributeTypeNode = (props) => {
+  const { nodes } = useStore(selector, shallow);
+  const node = nodes.find((n) => n.id === props.id);
 
-const AttributeTypeNode = ({ data }) => {
-  const [length, setLength] = useInputState(data.length || 255);
+  // give the node a default length of 255
+  useEffect(() => {
+    if (
+      node &&
+      node.data.length === undefined &&
+      node.data.type === "varchar"
+    ) {
+      console.log(node);
+      const newNode = {
+        ...node,
+        data: {
+          ...node.data,
+          length: 255,
+        },
+      };
+      nodesMap.set(props.id, newNode);
+    }
+  }, [node, props.id]);
 
   const handleChange = (event) => {
-    setLength(event.target.value);
-    data.length = event.target.value;
+    const newNode = {
+      ...node,
+      data: {
+        ...node.data,
+        length: event.target.value,
+      },
+    };
+
+    nodesMap.set(props.id, newNode);
   };
 
   const lengthSelector = () => {
-    return data.type === "varchar" ? (
+    return props.data.type === "varchar" ? (
       <input
         style={{
           width: "25px",
@@ -22,7 +54,7 @@ const AttributeTypeNode = ({ data }) => {
         }}
         type="text"
         maxLength={3}
-        value={length}
+        value={node && node.data.length ? node.data.length : ""}
         onChange={handleChange}
       />
     ) : null;
@@ -49,7 +81,7 @@ const AttributeTypeNode = ({ data }) => {
           textAlign: "center",
         }}
       >
-        {data.type}
+        {node && node.data.type ? node.data.type : ""}
       </div>
       {lengthSelector()}
     </div>

@@ -40,6 +40,9 @@ const useStore = create((set, get) => ({
         return n;
       }),
     });
+    nodes.forEach((node) => {
+      nodesMap.set(node.id, node);
+    });
   },
   showNodes: (nodes) => {
     set({
@@ -49,6 +52,9 @@ const useStore = create((set, get) => ({
         }
         return n;
       }),
+    });
+    nodes.forEach((node) => {
+      nodesMap.set(node.id, node);
     });
   },
   setNodes: (nodes) => {

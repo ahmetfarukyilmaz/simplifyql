@@ -60,9 +60,13 @@ function TableNode(props) {
     if (opened) {
       hideNodes(recursiveChildNodes);
       setOpened(false);
+      node.data.collapsed = true;
+      nodesMap.set(props.id, node);
     } else {
       showNodes(recursiveChildNodes);
       setOpened(true);
+      node.data.collapsed = false;
+      nodesMap.set(props.id, node);
     }
   };
 
@@ -129,7 +133,14 @@ function TableNode(props) {
             <IconArrowAutofitDown color="white" />
           </ActionIcon>
         </Paper>
-        <Collapse in={opened} transitionDuration={200}>
+        <Collapse
+          in={
+            node && node.data.collapsed !== undefined
+              ? !node.data.collapsed
+              : true
+          }
+          transitionDuration={200}
+        >
           <Paper
             shadow="xs"
             radius="lg"

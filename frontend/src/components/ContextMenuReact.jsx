@@ -2,6 +2,7 @@ import { Menu, Item, Submenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 
 import useStore from "store/store";
+import { nodesMap } from "useNodesStateSynced";
 import shallow from "zustand/shallow";
 
 const MENU_ID = "main-menu";
@@ -15,10 +16,7 @@ const selector = (state) => ({
 });
 
 export default function ContextMenuReact() {
-  const { addNode, getId, nodes, onNodesChange, selectedNode } = useStore(
-    selector,
-    shallow
-  );
+  const { addNode, getId, nodes, selectedNode } = useStore(selector, shallow);
 
   function handleCreateTable(e) {
     const x = e.event.clientX;
@@ -27,7 +25,7 @@ export default function ContextMenuReact() {
       id: getId(),
       type: "TableNode",
       position: { x, y },
-      data: { label: "Table" },
+      data: { label: "Table", collapsed: false },
       hidden: false,
     };
     addNode(newNode);
@@ -60,12 +58,17 @@ export default function ContextMenuReact() {
     // so if the attribute type already exist, then remove the node
     if (selectedNode.data.type === type) {
       selectedNode.data.type = "";
+
       const nodeToRemove = nodes.find(
         (n) => n.parentNode === selectedNode.id && n.data.type === type
       );
-      const index = nodes.indexOf(nodeToRemove);
-      nodes.splice(index, 1);
-      onNodesChange(nodes);
+
+      const newNodes = nodes.filter((n) => n.id !== nodeToRemove.id);
+      nodesMap.delete(nodeToRemove.id);
+      // for each newNodes, update nodesMap
+      newNodes.forEach((n) => {
+        nodesMap.set(n.id, n);
+      });
     }
     // if the attribute type does not exist, then create the node
     else {
@@ -97,9 +100,12 @@ export default function ContextMenuReact() {
       const nodeToRemove = nodes.find(
         (n) => n.parentNode === selectedNode.id && n.data.name === constraint
       );
-      const index = nodes.indexOf(nodeToRemove);
-      nodes.splice(index, 1);
-      onNodesChange(nodes);
+      const newNodes = nodes.filter((n) => n.id !== nodeToRemove.id);
+      nodesMap.delete(nodeToRemove.id);
+      // for each newNodes, update nodesMap
+      newNodes.forEach((n) => {
+        nodesMap.set(n.id, n);
+      });
     } else {
       const newNode = {
         id: getId(),
