@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 import { Paper, TextInput } from "@mantine/core";
 import {
@@ -7,9 +7,10 @@ import {
   ATTRIBUTE_TEXT_WIDTH,
 } from "constants";
 import useStore from "store/store";
+import { nodesMap } from "useNodesStateSynced";
 import { UpdateAttributeConstraintNodePositions } from "utils/calculateNodePosition";
 import shallow from "zustand/shallow";
-import { nodesMap } from "useNodesStateSynced";
+
 const selector = (state) => ({
   nodes: state.nodes,
 });
@@ -28,7 +29,9 @@ const paperStyles = {
 function AttributeNode(props) {
   const { nodes } = useStore(selector, shallow);
 
-  const node = nodes.find((n) => n.id === props.id);
+  const node = useMemo(() => {
+    return nodes.find((n) => n.id === props.id);
+  }, [nodes, props.id]);
 
   const onInputChange = (event) => {
     const newNode = {

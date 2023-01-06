@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import {
   applyNodeChanges,
   getConnectedEdges,
@@ -8,10 +8,13 @@ import {
   NodeResetChange,
   OnNodesChange,
 } from "reactflow";
-import ydoc from "./ydoc";
-import { edgesMap } from "./useEdgesStateSynced";
-import shallow from "zustand/shallow";
+
 import useStore from "store/store";
+import shallow from "zustand/shallow";
+
+import { edgesMap } from "./useEdgesStateSynced";
+import ydoc from "./ydoc";
+
 const selector = (state) => ({
   nodes: state.nodes,
   setNodes: state.setNodes,
@@ -27,14 +30,13 @@ const isNodeAddChange = (change: NodeChange): change is NodeAddChange =>
 const isNodeResetChange = (change: NodeChange): change is NodeResetChange =>
   change.type === "reset";
 
-function useNodesStateSynced(): [Node[], OnNodesChange] {
-  const { nodes, setNodes } = useStore(selector, shallow);
+function useNodesStateSynced(): [OnNodesChange] {
+  const { setNodes } = useStore(selector, shallow);
 
   // The onNodesChange callback updates nodesMap.
   // When the changes are applied to the map, the observer will be triggered and updates the nodes state.
   const onNodesChanges = useCallback((changes) => {
     const nodes = Array.from(nodesMap.values());
-
     const nextNodes = applyNodeChanges(changes, nodes);
     changes.forEach((change: NodeChange) => {
       if (!isNodeAddChange(change) && !isNodeResetChange(change)) {
@@ -52,7 +54,6 @@ function useNodesStateSynced(): [Node[], OnNodesChange] {
     });
   }, []);
 
-  // here we are observing the nodesMap and updating the nodes state whenever the map changes.
   useEffect(() => {
     const observer = () => {
       setNodes(Array.from(nodesMap.values()));
@@ -63,9 +64,8 @@ function useNodesStateSynced(): [Node[], OnNodesChange] {
 
     return () => nodesMap.unobserve(observer);
   }, [setNodes]);
-  // console log nodes every second
 
-  return [nodes.filter((n) => n), onNodesChanges];
+  return [onNodesChanges];
 }
 
 export default useNodesStateSynced;

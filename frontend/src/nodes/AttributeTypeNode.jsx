@@ -1,7 +1,9 @@
 import { useEffect } from "react";
+
+import useStore from "store/store";
 import { nodesMap } from "useNodesStateSynced";
 import shallow from "zustand/shallow";
-import useStore from "store/store";
+
 const selector = (state) => ({
   nodes: state.nodes,
 });
@@ -16,7 +18,6 @@ const AttributeTypeNode = (props) => {
       node.data.length === undefined &&
       node.data.type === "varchar"
     ) {
-      console.log(node);
       const newNode = {
         ...node,
         data: {

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Handle } from "reactflow";
-import { nodesMap } from "useNodesStateSynced";
+
 import {
   Paper,
   TextInput,
@@ -12,6 +12,7 @@ import { IconArrowAutofitDown } from "@tabler/icons";
 import { TABLE_HEIGHT, TABLE_WIDTH, TABLE_CONTENT_MIN_HEIGHT } from "constants";
 import { AttributeNode } from "nodes";
 import useStore from "store/store";
+import { nodesMap } from "useNodesStateSynced";
 import { UpdateAttributeNodePositions } from "utils/calculateNodePosition";
 import shallow from "zustand/shallow";
 
@@ -42,7 +43,9 @@ function TableNode(props) {
   );
   const [childNodes, setChildNodes] = useState([]);
   const [opened, setOpened] = useState(true);
-  const node = nodes.find((n) => n.id === props.id);
+  const node = useMemo(() => {
+    return nodes.find((n) => n.id === props.id);
+  }, [nodes, props.id]);
 
   const findChildNodesRecursive = (nodeId) => {
     const childNodes = nodes.filter((n) => n.parentNode === nodeId);
@@ -61,12 +64,10 @@ function TableNode(props) {
       hideNodes(recursiveChildNodes);
       setOpened(false);
       node.data.collapsed = true;
-      nodesMap.set(props.id, node);
     } else {
       showNodes(recursiveChildNodes);
       setOpened(true);
       node.data.collapsed = false;
-      nodesMap.set(props.id, node);
     }
   };
 

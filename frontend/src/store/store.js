@@ -4,12 +4,10 @@ import { edgesMap } from "useEdgesStateSynced";
 import { nodesMap } from "useNodesStateSynced";
 import create from "zustand";
 
-import { initialEdges, initialNodes } from "./nodes";
-
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create((set, get) => ({
-  nodes: initialNodes,
-  edges: initialEdges,
+  nodes: [],
+  edges: [],
   id: 1,
   edgeId: 1,
   getId: () => `node-${get().id++}`,
@@ -20,23 +18,15 @@ const useStore = create((set, get) => ({
     });
     nodesMap.set(node.id, node);
   },
-  deleteNode: (node) => {
-    set({
-      nodes: get().nodes.filter((n) => n.id !== node.id),
-    });
-    nodesMap.set(node.id, node);
-  },
   hideNodes: (nodes) => {
     set({
       nodes: get().nodes.map((n) => {
         if (nodes.includes(n)) {
           n.hidden = true;
+          nodesMap.set(n.id, n);
         }
         return n;
       }),
-    });
-    nodes.forEach((node) => {
-      nodesMap.set(node.id, node);
     });
   },
   showNodes: (nodes) => {
@@ -44,12 +34,10 @@ const useStore = create((set, get) => ({
       nodes: get().nodes.map((n) => {
         if (nodes.includes(n)) {
           n.hidden = false;
+          nodesMap.set(n.id, n);
         }
         return n;
       }),
-    });
-    nodes.forEach((node) => {
-      nodesMap.set(node.id, node);
     });
   },
   setNodes: (nodes) => {

@@ -62,7 +62,7 @@ function Flow() {
     id: "main-menu",
   });
 
-  const [nodesSync, onNodesChangeSync] = useNodesStateSynced();
+  const [onNodesChangeSync] = useNodesStateSynced();
   const [edgesSync, onEdgesChangeSync] = useEdgesStateSynced();
 
   const connectionLineStyle = {
