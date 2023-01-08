@@ -77,7 +77,7 @@ export function NotFoundPage() {
             the address, or the page has been moved to another URL.
           </Text>
           <Group position="center">
-            <Button component={Link} to="/">
+            <Button component={Link} to="/canvas">
               Take me back to home page
             </Button>
           </Group>

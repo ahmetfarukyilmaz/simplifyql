@@ -2,16 +2,34 @@ import { addEdge, applyNodeChanges, applyEdgeChanges } from "reactflow";
 
 import { edgesMap } from "useEdgesStateSynced";
 import { nodesMap } from "useNodesStateSynced";
+import { v4 as uuidv4 } from "uuid";
 import create from "zustand";
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create((set, get) => ({
+  autoSave: false,
+  disableAutoSave: () => {
+    set({
+      autoSave: false,
+    });
+  },
+  enableAutoSave: () => {
+    set({
+      autoSave: true,
+    });
+  },
+  autoSavedObjectId: null,
+  setAutoSavedObjectId: (id) => {
+    set({
+      autoSavedObjectId: id,
+    });
+  },
   nodes: [],
   edges: [],
-  id: 1,
-  edgeId: 1,
-  getId: () => `node-${get().id++}`,
-  getEdgeId: () => `edge-${get().edgeId++}`,
+  id: uuidv4(),
+  edgeId: uuidv4(),
+  getId: () => `node-${uuidv4()}`,
+  getEdgeId: () => `edge-${uuidv4()}`,
   addNode: (node) => {
     set({
       nodes: [...get().nodes, node],
@@ -41,9 +59,24 @@ const useStore = create((set, get) => ({
     });
   },
   setNodes: (nodes) => {
+    // check if nodes are already in the store
+    nodes.forEach((node) => {
+      if (!nodesMap.has(node.id)) {
+        nodesMap.set(node.id, node);
+      }
+    });
     set({
       nodes: nodes,
     });
+  },
+  // delete all nodes and edges and update the store
+  deleteAll: () => {
+    set({
+      nodes: [],
+      edges: [],
+    });
+    nodesMap.clear();
+    edgesMap.clear();
   },
 
   onNodesChange: (changes) => {
@@ -103,6 +136,13 @@ const useStore = create((set, get) => ({
     });
   },
   setEdges: (edges) => {
+    // check if edges are already in the store
+    edges.forEach((edge) => {
+      if (!edgesMap.has(edge.id)) {
+        edgesMap.set(edge.id, edge);
+      }
+    });
+
     set({
       edges: edges,
     });

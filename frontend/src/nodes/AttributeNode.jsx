@@ -24,6 +24,7 @@ const paperStyles = {
   justifyContent: "space-between",
   paddingLeft: "10px",
   paddingRight: "10px",
+  backgroundColor: "#f5f5f5",
 };
 
 function AttributeNode(props) {
@@ -45,10 +46,10 @@ function AttributeNode(props) {
     const parentNode = nodes.find((n) => n.id === props.id);
     // if node itself is deleted, do not update attribute positions, it will cause error
     if (parentNode) UpdateAttributeConstraintNodePositions(nodes, parentNode);
-  }, [nodes, props.id]);
+  }, [nodes]);
 
   return (
-    <Paper sx={paperStyles} shadow="xs" radius="lg" bg="#F8F9FA" withBorder>
+    <Paper sx={paperStyles} shadow="xs" radius="lg" withBorder>
       <TextInput
         value={node && node.data.name ? node.data.name : ""}
         onChange={onInputChange}

@@ -16,9 +16,7 @@ import { edgesMap } from "./useEdgesStateSynced";
 import ydoc from "./ydoc";
 
 const selector = (state) => ({
-  nodes: state.nodes,
   setNodes: state.setNodes,
-  onNodesChange: state.onNodesChange,
 });
 // We are using nodesMap as the one source of truth for the nodes.
 // This means that we are doing all changes to the nodes in the map object.

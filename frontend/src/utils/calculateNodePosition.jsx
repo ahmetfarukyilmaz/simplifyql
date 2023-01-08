@@ -8,6 +8,9 @@ import {
 const UpdateAttributeNodePositions = (nodes, parentNode) => {
   let y = 0;
   const x = parentNode.width / MARGIN_DIVIDER;
+  if (parentNode.type !== "TableNode") {
+    return null;
+  }
 
   // Loop through the remaining child nodes
   const childNodes = nodes.filter((n) => n.parentNode === parentNode.id);
@@ -25,7 +28,7 @@ const UpdateAttributeConstraintNodePositions = (nodes, parentNode) => {
   // attribute constraints positions are horizontal, so y is the same
   // attribute constraints located at the right side of the text input of the attribute node.
   let x = 0;
-  const y = 0;
+  let y = 0;
   let previousChildNodeWidth = 0;
   for (const childNode of childNodes) {
     // store the previous childNode
@@ -40,6 +43,7 @@ const UpdateAttributeConstraintNodePositions = (nodes, parentNode) => {
     previousChildNodeWidth = generateAttributeConstraintNodeWidth(
       childNode.data.name
     );
+
     childNode.position.y = y;
     childNode.position.x = x;
   }

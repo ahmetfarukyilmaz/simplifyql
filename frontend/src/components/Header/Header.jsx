@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import {
   Header as MantineHeader,
@@ -9,6 +10,7 @@ import {
   createStyles,
 } from "@mantine/core";
 import { IconChevronDown, IconLogout } from "@tabler/icons";
+import github_logo from "static/github_logo.svg";
 
 const useStyles = createStyles((theme) => ({
   user: {
@@ -31,9 +33,38 @@ const useStyles = createStyles((theme) => ({
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
   },
+  githubLogo: {
+    width: "34px",
+    height: "34px",
+    borderRadius: "8px",
+    border: "1px solid #dee2e6",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#495057",
+    backgroundColor: "#fff",
+    textSizeAdjust: "100%",
+    colorScheme: "light",
+    lineHeight: "1.55",
+    WebkitFontSmoothing: "antialiased",
+    background: "transparent",
+    WebkitBoxFlex: "0",
+    flexGrow: "0",
+    fontFamily:
+      "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji",
+    cursor: "pointer",
+    padding: "0",
+    appearance: "none",
+    fontSize: "16px",
+    textAlign: "left",
+    textDecoration: "none",
+    boxSizing: "border-box",
+    WebkitTapHighlightColor: "transparent",
+  },
 }));
 
 export default function Header() {
+  const email = localStorage.getItem("email");
   const { classes, cx } = useStyles();
 
   const [userMenuOpened, setUserMenuOpened] = useState(false);
@@ -44,9 +75,66 @@ export default function Header() {
   };
 
   return (
-    <MantineHeader height={80} p="xs">
-      <Group sx={{ height: "100%" }} px={20} position="apart">
-        <h3>SimplifyQL</h3>
+    <MantineHeader
+      sx={{
+        display: "flex",
+        alignItems: "center",
+      }}
+      height={80}
+      p="md"
+    >
+      <h3
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          alignItems: "center",
+          width: "100%",
+          paddingLeft: "30px",
+        }}
+      >
+        SimplifyQL
+      </h3>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          gap: "30px",
+        }}
+      >
+        <Link
+          style={{ textDecoration: "none", color: "black" }}
+          to="/er-diagrams"
+        >
+          My ER Diagrams
+        </Link>
+        <Link style={{ textDecoration: "none", color: "black" }} to="/canvas">
+          ER Diagram Builder
+        </Link>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          width: "100%",
+          paddingRight: "30px",
+          gap: "30px",
+        }}
+      >
+        <a
+          className={classes.githubLogo}
+          href="https://github.com/ahmetfarukyilmaz/simplifyql"
+          target="_blank"
+        >
+          <img
+            src={github_logo}
+            style={{ height: "30px", width: "30px" }}
+            alt="github logo"
+          />
+        </a>
 
         <Menu
           width={200}
@@ -62,7 +150,7 @@ export default function Header() {
             >
               <Group spacing={7}>
                 <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
-                  John Doe
+                  {email}
                 </Text>
                 <IconChevronDown size={12} stroke={1.5} />
               </Group>
@@ -77,7 +165,7 @@ export default function Header() {
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
-      </Group>
+      </div>
     </MantineHeader>
   );
 }

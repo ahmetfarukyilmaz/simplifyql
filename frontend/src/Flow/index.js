@@ -16,7 +16,9 @@ import {
   AttributeTypeNode,
 } from "nodes";
 import useStore from "store/store";
+import { edgesMap } from "useEdgesStateSynced";
 import useEdgesStateSynced from "useEdgesStateSynced";
+import { nodesMap } from "useNodesStateSynced";
 import useNodesStateSynced from "useNodesStateSynced";
 import request from "utils/request";
 import shallow from "zustand/shallow";
@@ -36,10 +38,14 @@ const edgeTypes = {
 const selector = (state) => ({
   nodes: state.nodes,
   edges: state.edges,
+  setNodes: state.setNodes,
+  setEdges: state.setEdges,
   onConnect: state.onConnect,
   setSelectedNode: state.setSelectedNode,
   selectedNode: state.selectedNode,
   disableEdgeAnimations: state.disableEdgeAnimations,
+  autoSave: state.autoSave,
+  autoSavedObjectId: state.autoSavedObjectId,
 });
 
 function Flow() {
@@ -52,10 +58,12 @@ function Flow() {
   const {
     nodes,
     edges,
+    autoSave,
     onConnect,
     selectedNode,
     setSelectedNode,
     disableEdgeAnimations,
+    autoSavedObjectId,
   } = useStore(selector, shallow);
 
   const { show } = useContextMenu({
@@ -63,7 +71,7 @@ function Flow() {
   });
 
   const [onNodesChangeSync] = useNodesStateSynced();
-  const [edgesSync, onEdgesChangeSync] = useEdgesStateSynced();
+  const [onEdgesChangeSync] = useEdgesStateSynced();
 
   const connectionLineStyle = {
     strokeWidth: 3,
@@ -139,6 +147,30 @@ function Flow() {
     return displayString;
   };
 
+  const handleAutoSave = async () => {
+    const data = {
+      raw_data: rfInstance.toObject(),
+    };
+    try {
+      await request.post("/sql/update-er-diagram/" + autoSavedObjectId, data);
+      showNotification({
+        title: "Success",
+        message: "Diagram saved",
+        color: "green",
+      });
+    } catch (error) {
+      const errorMessage =
+        error.response.data.detail ||
+        error.response.data ||
+        "Something went wrong";
+      showNotification({
+        title: "Error",
+        message: errorMessage,
+        color: "red",
+      });
+    }
+  };
+
   return (
     <ReactFlowProvider>
       <ContextMenuReact />
@@ -170,12 +202,24 @@ function Flow() {
       </ReactFlow>
       <Button
         color="dark"
-        sx={{ position: "absolute", top: 100, right: 20 }}
+        sx={{ position: "absolute", top: 100, right: 20, minWidth: 150 }}
         onClick={() => setModalOpen(true)}
       >
         Generate SQL
       </Button>
-      <Button
+      {autoSave && (
+        <Button
+          color="dark"
+          sx={{ position: "absolute", top: 150, right: 20, minWidth: 150 }}
+          onClick={() => {
+            handleAutoSave();
+          }}
+        >
+          Save Diagram
+        </Button>
+      )}
+
+      {/* <Button
         color="dark"
         sx={{ position: "absolute", top: 150, right: 20 }}
         onClick={() => {
@@ -192,7 +236,7 @@ function Flow() {
         }}
       >
         Log Edges
-      </Button>
+      </Button> */}
       <Switch
         color="dark"
         labelPosition="left"

@@ -3,17 +3,17 @@ import {
   Edge,
   applyEdgeChanges,
   OnEdgesChange,
-  OnConnect,
-  Connection,
   EdgeChange,
   EdgeAddChange,
   EdgeResetChange,
   EdgeRemoveChange,
 } from "reactflow";
 
-import ydoc from "./ydoc";
-import shallow from "zustand/shallow";
 import useStore from "store/store";
+import shallow from "zustand/shallow";
+
+import ydoc from "./ydoc";
+
 const selector = (state) => ({
   edges: state.edges,
   setEdges: state.setEdges,
@@ -31,8 +31,8 @@ const isEdgeResetChange = (change: EdgeChange): change is EdgeResetChange =>
 const isEdgeRemoveChange = (change: EdgeChange): change is EdgeRemoveChange =>
   change.type === "remove";
 
-function useEdgesStateSynced(): [Edge[], OnEdgesChange, OnConnect] {
-  const { edges, setEdges } = useStore(selector, shallow);
+function useEdgesStateSynced(): [OnEdgesChange] {
+  const { setEdges } = useStore(selector, shallow);
 
   const onEdgesChange = useCallback((changes) => {
     const currentEdges = Array.from(edgesMap.values()).filter((e) => e);
@@ -49,18 +49,6 @@ function useEdgesStateSynced(): [Edge[], OnEdgesChange, OnConnect] {
     });
   }, []);
 
-  const onConnect = useCallback((params: Connection | Edge) => {
-    const { source, sourceHandle, target, targetHandle } = params;
-    const id = `edge-${source}${sourceHandle || ""}-${target}${
-      targetHandle || ""
-    }`;
-
-    edgesMap.set(id, {
-      id,
-      ...params,
-    } as Edge);
-  }, []);
-
   useEffect(() => {
     const observer = () => {
       setEdges(Array.from(edgesMap.values()));
@@ -72,7 +60,7 @@ function useEdgesStateSynced(): [Edge[], OnEdgesChange, OnConnect] {
     return () => edgesMap.unobserve(observer);
   }, [setEdges]);
 
-  return [edges, onEdgesChange, onConnect];
+  return [onEdgesChange];
 }
 
 export default useEdgesStateSynced;

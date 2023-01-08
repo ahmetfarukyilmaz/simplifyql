@@ -12,22 +12,21 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
+import logo from "static/logo.png";
 import request from "utils/request";
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
-    minHeight: 1200,
-    backgroundSize: "cover",
-    backgroundImage:
-      "url(https://images.unsplash.com/photo-1484242857719-4b9144542727?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80)",
+    // make the form and image side by side
+    display: "flex",
+    maxHeight: "100vh",
   },
-
   form: {
     borderRight: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[3]
     }`,
-    minHeight: 1200,
     maxWidth: 450,
+    minWidth: 450,
     paddingTop: 80,
 
     [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
@@ -39,19 +38,11 @@ const useStyles = createStyles((theme) => ({
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
   },
-
-  logo: {
-    color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    width: 120,
-    display: "block",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
 }));
 
 export function LoginPage() {
   if (localStorage.getItem("token")) {
-    window.location.href = "/";
+    window.location.href = "/canvas";
   }
   const { classes } = useStyles();
 
@@ -72,8 +63,10 @@ export function LoginPage() {
     try {
       const response = await request.post("/users/login", values);
       const token = response.data.auth_token;
+      const email = response.data.email;
       localStorage.setItem("token", token);
-      window.location.href = "/";
+      localStorage.setItem("email", email);
+      window.location.href = "/canvas";
     } catch (error) {
       showNotification({
         title: "Error",
@@ -135,6 +128,13 @@ export function LoginPage() {
           </Anchor>
         </Text>
       </Paper>
+      <img
+        style={{
+          width: "75%",
+          objectFit: "contain",
+        }}
+        src={logo}
+      />
     </div>
   );
 }

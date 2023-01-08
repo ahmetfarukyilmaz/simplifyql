@@ -67,3 +67,11 @@ class SqlSchema(Schema):
     edges: list[EdgeSchema] = None
     name: str
     raw_data: dict = {}
+
+
+class UpdateDiagramSchema(Schema):
+    """
+    Schema that comes from the frontend
+    """
+
+    raw_data: dict = None

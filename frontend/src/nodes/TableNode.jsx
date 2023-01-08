@@ -8,13 +8,15 @@ import {
   SimpleGrid,
   ActionIcon,
 } from "@mantine/core";
-import { IconArrowAutofitDown } from "@tabler/icons";
+import { IconArrowDownCircle } from "@tabler/icons";
 import { TABLE_HEIGHT, TABLE_WIDTH, TABLE_CONTENT_MIN_HEIGHT } from "constants";
 import { AttributeNode } from "nodes";
 import useStore from "store/store";
 import { nodesMap } from "useNodesStateSynced";
 import { UpdateAttributeNodePositions } from "utils/calculateNodePosition";
 import shallow from "zustand/shallow";
+
+import style from "./TableNode.module.css";
 
 const selector = (state) => ({
   nodes: state.nodes,
@@ -117,9 +119,10 @@ function TableNode(props) {
           }}
         >
           <TextInput
+            className={style.tableName}
             value={node && node.data.name ? node.data.name : ""}
             onChange={onInputChange}
-            placeholder="Table Name"
+            placeholder="Table Name Placeholder"
             required
             variant="unstyled"
             sx={{ width: "75%" }}
@@ -131,7 +134,7 @@ function TableNode(props) {
             size="lg"
             style={{ position: "absolute", right: 20, top: 20 }}
           >
-            <IconArrowAutofitDown color="white" />
+            <IconArrowDownCircle color="white" />
           </ActionIcon>
         </Paper>
         <Collapse

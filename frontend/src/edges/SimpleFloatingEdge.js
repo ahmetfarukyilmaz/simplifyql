@@ -6,7 +6,7 @@ import { Button } from "@mantine/core";
 
 import { getEdgeParams } from "./utils.js";
 
-const buttonHeight = 25;
+const buttonHeight = 50;
 const buttonWidth = 150;
 
 function SimpleFloatingEdge({
@@ -72,10 +72,13 @@ function SimpleFloatingEdge({
       >
         <div>
           <Button
+            sx={{
+              width: buttonWidth,
+              height: buttonHeight,
+            }}
             onClick={onEdgeClick}
             color="dark"
             radius="xl"
-            size="xs"
             compact
           >
             Change Relationsip

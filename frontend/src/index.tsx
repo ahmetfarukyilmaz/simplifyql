@@ -10,7 +10,9 @@ import { LoginPage, NotFoundPage, RegisterPage } from "pages";
 import "./index.css";
 
 const router = createBrowserRouter([
-  { path: "/", element: <App /> },
+  { path: "/", element: <LoginPage /> },
+  { path: "/canvas", element: <App /> },
+  { path: "/er-diagrams", element: <App /> },
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <RegisterPage /> },
   { path: "*", element: <NotFoundPage /> },
@@ -20,11 +22,9 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <MantineProvider withGlobalStyles withNormalizeCSS>
-      <NotificationsProvider>
-        <RouterProvider router={router} />
-      </NotificationsProvider>
-    </MantineProvider>
-  </React.StrictMode>
+  <MantineProvider withGlobalStyles withNormalizeCSS>
+    <NotificationsProvider>
+      <RouterProvider router={router} />
+    </NotificationsProvider>
+  </MantineProvider>
 );
