@@ -83,7 +83,7 @@ export default function Header() {
       height={80}
       p="md"
     >
-      <h3
+      <h2
         style={{
           display: "flex",
           justifyContent: "flex-start",
@@ -93,14 +93,16 @@ export default function Header() {
         }}
       >
         SimplifyQL
-      </h3>
+      </h2>
+
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "flex-end",
           alignItems: "center",
           width: "100%",
-          gap: "30px",
+          paddingRight: "30px",
+          gap: "20px",
         }}
       >
         <Link
@@ -112,18 +114,6 @@ export default function Header() {
         <Link style={{ textDecoration: "none", color: "black" }} to="/canvas">
           ER Diagram Builder
         </Link>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          width: "100%",
-          paddingRight: "30px",
-          gap: "30px",
-        }}
-      >
         <a
           className={classes.githubLogo}
           href="https://github.com/ahmetfarukyilmaz/simplifyql"

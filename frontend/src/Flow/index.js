@@ -16,9 +16,7 @@ import {
   AttributeTypeNode,
 } from "nodes";
 import useStore from "store/store";
-import { edgesMap } from "useEdgesStateSynced";
 import useEdgesStateSynced from "useEdgesStateSynced";
-import { nodesMap } from "useNodesStateSynced";
 import useNodesStateSynced from "useNodesStateSynced";
 import request from "utils/request";
 import shallow from "zustand/shallow";

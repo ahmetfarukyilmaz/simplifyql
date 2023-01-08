@@ -25,7 +25,7 @@ const useStyles = createStyles((theme) => ({
     ...theme.fn.focusStyles(),
     display: "flex",
     alignItems: "center",
-    width: "50%",
+    width: "100%",
     borderRadius: theme.radius.md,
     border: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
@@ -93,6 +93,8 @@ export function ErDiagrams() {
 
   return (
     <>
+      <LoadingOverlay visible={loading} />
+      <h2>Previously Created ER Diagrams</h2>
       <DragDropContext
         onDragEnd={({ destination, source }) =>
           handlers.reorder({ from: source.index, to: destination?.index || 0 })
@@ -101,8 +103,8 @@ export function ErDiagrams() {
         <Droppable droppableId="dnd-list" direction="vertical">
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {state.length === 0 && <NotFoundImage />}
-              <LoadingOverlay visible={loading} />
+              {!loading && state.length === 0 && <NotFoundImage />}
+
               {state &&
                 state.map((item, index) => (
                   <Draggable
@@ -122,7 +124,7 @@ export function ErDiagrams() {
                         <div>
                           <Text>{item.name}</Text>
                           <Text color="dimmed" size="sm">
-                            Table Count: {item.tables.length}
+                            Tables: {item.tables.length}
                           </Text>
                         </div>
                         <Button

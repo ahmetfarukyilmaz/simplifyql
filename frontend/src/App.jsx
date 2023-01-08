@@ -1,5 +1,3 @@
-import { ReactFlowProvider } from "reactflow";
-
 import { AppShell } from "@mantine/core";
 import Flow from "Flow";
 import { Header } from "components";
