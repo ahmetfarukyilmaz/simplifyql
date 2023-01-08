@@ -134,6 +134,7 @@ export function LoginPage() {
           objectFit: "contain",
         }}
         src={logo}
+        alt="Login Page"
       />
     </div>
   );

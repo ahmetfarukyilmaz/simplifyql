@@ -19,7 +19,6 @@ import useStore from "store/store";
 import useEdgesStateSynced from "useEdgesStateSynced";
 import useNodesStateSynced from "useNodesStateSynced";
 import request from "utils/request";
-import { useUsers } from "y-presence";
 import shallow from "zustand/shallow";
 
 import { markers } from "./markers";
