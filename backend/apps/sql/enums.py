@@ -17,6 +17,10 @@ class AttributeType(str, Enum):
     INTEGER = "integer"
     VARCHAR = "varchar"
     BOOLEAN = "boolean"
+    DATE = "date"
+    TIME = "time"
+    TIMESTAMP = "timestamp"
+    UUID = "UUID"
 
 
 class RelationshipType(str, Enum):

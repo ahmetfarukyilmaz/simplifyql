@@ -217,6 +217,12 @@ export default function ContextMenuReact() {
         INTEGER {checkmarkForType("integer")}
       </Item>
       <Item
+        disabled={isAttributeTypeSelectDisabled("UUID")}
+        onClick={() => handleCreateAttributeType("UUID")}
+      >
+        UUID {checkmarkForType("UUID")}
+      </Item>
+      <Item
         disabled={isAttributeTypeSelectDisabled("boolean")}
         onClick={() => handleCreateAttributeType("boolean")}
       >
@@ -227,6 +233,24 @@ export default function ContextMenuReact() {
         onClick={() => handleCreateAttributeType("text")}
       >
         TEXT {checkmarkForType("text")}
+      </Item>
+      <Item
+        disabled={isAttributeTypeSelectDisabled("date")}
+        onClick={() => handleCreateAttributeType("date")}
+      >
+        DATE {checkmarkForType("date")}
+      </Item>
+      <Item
+        disabled={isAttributeTypeSelectDisabled("time")}
+        onClick={() => handleCreateAttributeType("time")}
+      >
+        TIME {checkmarkForType("time")}
+      </Item>
+      <Item
+        disabled={isAttributeTypeSelectDisabled("timestamp")}
+        onClick={() => handleCreateAttributeType("timestamp")}
+      >
+        TIMESTAMP {checkmarkForType("timestamp")}
       </Item>
     </Submenu>
   );
