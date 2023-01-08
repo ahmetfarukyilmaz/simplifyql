@@ -6,7 +6,7 @@ import { Button } from "@mantine/core";
 
 import { getEdgeParams } from "./utils.js";
 
-const buttonHeight = 50;
+const buttonHeight = 30;
 const buttonWidth = 150;
 
 function SimpleFloatingEdge({
