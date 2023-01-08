@@ -152,8 +152,8 @@ function TableNode(props) {
               borderTopLeftRadius: 0,
               borderTopRightRadius: 0,
               minHeight: TABLE_CONTENT_MIN_HEIGHT,
+              paddingBottom: 50,
             }}
-            p="md"
             withBorder
             bg="white"
           >
