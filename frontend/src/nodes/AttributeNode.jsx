@@ -38,7 +38,10 @@ function AttributeNode(props) {
   const onInputChange = (event) => {
     const parentNode = nodes.find((n) => n.id === props.id);
     const tableNode = nodes.find((n) => n.id === parentNode.parentNode);
-    if (tableNode.data.locked_by !== localStorage.getItem("email")) {
+    if (
+      tableNode.data.locked_by &&
+      tableNode.data.locked_by !== localStorage.getItem("email")
+    ) {
       showNotification({
         title: "Table is locked",
         message: `Table is locked by ${tableNode.data.locked_by} `,

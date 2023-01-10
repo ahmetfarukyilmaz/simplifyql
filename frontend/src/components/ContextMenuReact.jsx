@@ -34,7 +34,10 @@ export default function ContextMenuReact() {
   }
 
   const handleCreateAttribute = () => {
-    if (selectedNode.data.locked_by !== localStorage.getItem("email")) {
+    if (
+      selectedNode.data.locked_by &&
+      selectedNode.data.locked_by !== localStorage.getItem("email")
+    ) {
       showNotification({
         title: "Table is locked",
         message: `Table is locked by ${selectedNode.data.locked_by} `,
@@ -65,7 +68,10 @@ export default function ContextMenuReact() {
 
   const handleCreateAttributeType = (type) => {
     const tableNode = nodes.find((n) => n.id === selectedNode.parentNode);
-    if (tableNode.data.locked_by !== localStorage.getItem("email")) {
+    if (
+      tableNode.data.locked_by &&
+      tableNode.data.locked_by !== localStorage.getItem("email")
+    ) {
       showNotification({
         title: "Table is locked",
         message: `Table is locked by ${tableNode.data.locked_by} `,
@@ -114,7 +120,10 @@ export default function ContextMenuReact() {
 
   const handleCreateAttributeConstraint = (constraint) => {
     const tableNode = nodes.find((n) => n.id === selectedNode.parentNode);
-    if (tableNode.data.locked_by !== localStorage.getItem("email")) {
+    if (
+      tableNode.data.locked_by &&
+      tableNode.data.locked_by !== localStorage.getItem("email")
+    ) {
       showNotification({
         title: "Table is locked",
         message: `Table is locked by ${tableNode.data.locked_by} `,

@@ -63,7 +63,10 @@ function TableNode(props) {
   const handleCollapse = () => {
     const recursiveChildNodes = findChildNodesRecursive(props.id);
 
-    if (node.data.locked_by !== localStorage.getItem("email")) {
+    if (
+      node.data.locked_by &&
+      node.data.locked_by !== localStorage.getItem("email")
+    ) {
       showNotification({
         title: "Table is locked",
         message: `Table is locked by ${node.data.locked_by} `,
@@ -103,7 +106,10 @@ function TableNode(props) {
   };
 
   const onInputChange = (event) => {
-    if (node.data.locked_by !== localStorage.getItem("email")) {
+    if (
+      node.data.locked_by &&
+      node.data.locked_by !== localStorage.getItem("email")
+    ) {
       showNotification({
         title: "Table is locked",
         message: `Table is locked by ${node.data.locked_by} `,
