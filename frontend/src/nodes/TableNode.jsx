@@ -8,7 +8,8 @@ import {
   SimpleGrid,
   ActionIcon,
 } from "@mantine/core";
-import { IconArrowDownCircle } from "@tabler/icons";
+import { showNotification } from "@mantine/notifications";
+import { IconArrowDownCircle, IconLock, IconLockOpen } from "@tabler/icons";
 import { TABLE_HEIGHT, TABLE_WIDTH, TABLE_CONTENT_MIN_HEIGHT } from "constants";
 import { AttributeNode } from "nodes";
 import useStore from "store/store";
@@ -62,6 +63,15 @@ function TableNode(props) {
   const handleCollapse = () => {
     const recursiveChildNodes = findChildNodesRecursive(props.id);
 
+    if (node.data.locked_by !== localStorage.getItem("email")) {
+      showNotification({
+        title: "Table is locked",
+        message: `Table is locked by ${node.data.locked_by} `,
+        color: "red",
+      });
+      return;
+    }
+
     if (opened) {
       hideNodes(recursiveChildNodes);
       setOpened(false);
@@ -73,7 +83,34 @@ function TableNode(props) {
     }
   };
 
+  const handleLock = () => {
+    if (!node.draggable) {
+      if (node.data.locked_by === localStorage.getItem("email")) {
+        node.draggable = true;
+        node.data.locked_by = null;
+      } else {
+        showNotification({
+          title: "Table is locked",
+          message: `Table is locked by ${node.data.locked_by} `,
+          color: "red",
+        });
+      }
+    } else {
+      node.draggable = false;
+      node.data.locked_by = localStorage.getItem("email");
+    }
+    nodesMap.set(props.id, node);
+  };
+
   const onInputChange = (event) => {
+    if (node.data.locked_by !== localStorage.getItem("email")) {
+      showNotification({
+        title: "Table is locked",
+        message: `Table is locked by ${node.data.locked_by} `,
+        color: "red",
+      });
+      return;
+    }
     const newNode = {
       ...node,
       data: {
@@ -135,6 +172,19 @@ function TableNode(props) {
             style={{ position: "absolute", right: 20, top: 20 }}
           >
             <IconArrowDownCircle color="white" />
+          </ActionIcon>
+          <ActionIcon
+            onClick={handleLock}
+            color="blue"
+            variant="filled"
+            size="lg"
+            style={{ position: "absolute", right: 60, top: 20 }}
+          >
+            {!node.draggable ? (
+              <IconLock color="white" />
+            ) : (
+              <IconLockOpen color="white" />
+            )}
           </ActionIcon>
         </Paper>
         <Collapse

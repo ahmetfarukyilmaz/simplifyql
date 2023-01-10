@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import { showNotification } from "@mantine/notifications";
 import useStore from "store/store";
 import { nodesMap } from "useNodesStateSynced";
 import shallow from "zustand/shallow";
@@ -30,6 +31,17 @@ const AttributeTypeNode = (props) => {
   }, [node, props.id]);
 
   const handleChange = (event) => {
+    const node = nodes.find((n) => n.id === props.id);
+    const attributeNode = nodes.find((n) => n.id === node.parentNode);
+    const tableNode = nodes.find((n) => n.id === attributeNode.parentNode);
+    if (tableNode.data.locked_by !== localStorage.getItem("email")) {
+      showNotification({
+        title: "Table is locked",
+        message: `Table is locked by ${tableNode.data.locked_by} `,
+        color: "red",
+      });
+      return;
+    }
     const newNode = {
       ...node,
       data: {

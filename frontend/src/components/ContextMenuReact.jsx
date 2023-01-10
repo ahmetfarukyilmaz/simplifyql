@@ -1,6 +1,7 @@
 import { Menu, Item, Submenu } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 
+import { showNotification } from "@mantine/notifications";
 import useStore from "store/store";
 import { nodesMap } from "useNodesStateSynced";
 import shallow from "zustand/shallow";
@@ -25,13 +26,22 @@ export default function ContextMenuReact() {
       id: getId(),
       type: "TableNode",
       position: { x, y },
-      data: { label: "Table", collapsed: false },
+      data: { label: "Table", collapsed: false, locked: false },
       hidden: false,
+      draggable: true,
     };
     addNode(newNode);
   }
 
   const handleCreateAttribute = () => {
+    if (selectedNode.data.locked_by !== localStorage.getItem("email")) {
+      showNotification({
+        title: "Table is locked",
+        message: `Table is locked by ${selectedNode.data.locked_by} `,
+        color: "red",
+      });
+      return;
+    }
     const newNode = {
       id: getId(),
       type: "AttributeNode",
@@ -54,6 +64,16 @@ export default function ContextMenuReact() {
   };
 
   const handleCreateAttributeType = (type) => {
+    const tableNode = nodes.find((n) => n.id === selectedNode.parentNode);
+    if (tableNode.data.locked_by !== localStorage.getItem("email")) {
+      showNotification({
+        title: "Table is locked",
+        message: `Table is locked by ${tableNode.data.locked_by} `,
+        color: "red",
+      });
+      return;
+    }
+
     // for each attribute node, only one attribute type can be exist
     // so if the attribute type already exist, then remove the node
     if (selectedNode.data.type === type) {
@@ -93,6 +113,15 @@ export default function ContextMenuReact() {
   };
 
   const handleCreateAttributeConstraint = (constraint) => {
+    const tableNode = nodes.find((n) => n.id === selectedNode.parentNode);
+    if (tableNode.data.locked_by !== localStorage.getItem("email")) {
+      showNotification({
+        title: "Table is locked",
+        message: `Table is locked by ${tableNode.data.locked_by} `,
+        color: "red",
+      });
+      return;
+    }
     // check if attribute constraint already true in constraints object
     if (selectedNode.data.constraints[constraint]) {
       // make constraint false and remove the node

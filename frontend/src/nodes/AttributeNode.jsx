@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 
 import { Paper, TextInput } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import {
   ATTRIBUTE_HEIGHT,
   ATTRIBUTE_WIDTH,
@@ -35,6 +36,17 @@ function AttributeNode(props) {
   }, [nodes, props.id]);
 
   const onInputChange = (event) => {
+    const parentNode = nodes.find((n) => n.id === props.id);
+    const tableNode = nodes.find((n) => n.id === parentNode.parentNode);
+    if (tableNode.data.locked_by !== localStorage.getItem("email")) {
+      showNotification({
+        title: "Table is locked",
+        message: `Table is locked by ${tableNode.data.locked_by} `,
+        color: "red",
+      });
+      return;
+    }
+
     const newNode = {
       ...node,
       data: { ...node.data, name: event.target.value },
