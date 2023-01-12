@@ -21,6 +21,8 @@ def create_tables(request, data: SqlSchema):
         return 400, ErrorSchema(detail="Invalid credentials")
 
     nodes = data.nodes
+    if not nodes:
+        return 400, ErrorSchema(detail="No table found")
     edges = data.edges
     name = data.name
     raw_data = data.raw_data

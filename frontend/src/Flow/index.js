@@ -3,7 +3,14 @@ import { useContextMenu } from "react-contexify";
 import ReactFlow, { Background, Controls, ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
 
-import { Button, Badge, Modal, Input, Switch } from "@mantine/core";
+import {
+  Button,
+  Badge,
+  Modal,
+  Input,
+  Switch,
+  LoadingOverlay,
+} from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import ContextMenuReact from "components/ContextMenuReact";
 import RelationshipMenu from "components/RelationshipMenu";
@@ -52,6 +59,7 @@ function Flow() {
   const [modalOpen, setModalOpen] = useState(false);
   const [diagramName, setDiagramName] = useState("");
   const [disableAnimations, setDisableAnimations] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const {
     nodes,
@@ -87,6 +95,7 @@ function Flow() {
   };
 
   const exportData = async () => {
+    setLoading(true);
     const data = {
       nodes: nodes,
       edges: edges,
@@ -122,6 +131,7 @@ function Flow() {
       });
     }
     setModalOpen(false);
+    setLoading(false);
   };
 
   const onNodeMouseEnter = (e, node) => {
@@ -173,6 +183,7 @@ function Flow() {
     <ReactFlowProvider>
       <ContextMenuReact />
       <RelationshipMenu />
+      <LoadingOverlay visible={loading} />
 
       <ReactFlow
         onInit={setRfInstance}
