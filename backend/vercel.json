@@ -19,6 +19,10 @@
     ],
     "routes": [
         {
+            "src": "/static/(.*)",
+            "dest": "/static/$1"
+        },
+        {
             "src": "/(.*)",
             "dest": "simplifyql/wsgi.py"
         }
