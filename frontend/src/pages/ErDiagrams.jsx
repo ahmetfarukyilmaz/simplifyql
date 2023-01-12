@@ -94,7 +94,7 @@ export function ErDiagrams() {
   return (
     <>
       <LoadingOverlay visible={loading} />
-      <h2>Previously Created ER Diagrams</h2>
+      {state.length !== 0 && <h2>Previously Created ER Diagrams</h2>}
       <DragDropContext
         onDragEnd={({ destination, source }) =>
           handlers.reorder({ from: source.index, to: destination?.index || 0 })

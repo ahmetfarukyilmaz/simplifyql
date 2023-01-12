@@ -70,10 +70,4 @@ def generate_sql_code(tables):
         sql_code += generate_one_to_one_relationship(table, tables)
         sql_code += generate_one_to_many_relationship(table, tables)
 
-    # for table in tables:
-    #     sql_code += generate_one_to_one_relationship(table, tables)
-
-    # for table in tables:
-    #     sql_code += generate_one_to_many_relationship(table, tables)
-
     return sql_code

@@ -87,7 +87,7 @@ function TableNode(props) {
   };
 
   const handleLock = () => {
-    if (!node.draggable) {
+    if (node && !node.draggable) {
       if (node.data.locked_by === localStorage.getItem("email")) {
         node.draggable = true;
         node.data.locked_by = null;
@@ -186,7 +186,7 @@ function TableNode(props) {
             size="lg"
             style={{ position: "absolute", right: 60, top: 20 }}
           >
-            {!node.draggable ? (
+            {node && !node.draggable ? (
               <IconLock color="white" />
             ) : (
               <IconLockOpen color="white" />
