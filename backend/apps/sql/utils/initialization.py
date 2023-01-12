@@ -16,7 +16,7 @@ def initialize_tables(data: list[NodeSchema]):
         raise HttpError(400, f"Table {table_name} has {error_message}")
 
     if not table_name_check:
-        raise HttpError(400, f"{table_name} has {error_message}")
+        raise HttpError(400, f"{table_name}, {error_message}")
 
     return tables
 
