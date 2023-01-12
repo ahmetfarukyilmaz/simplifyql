@@ -3,7 +3,11 @@ import { Doc } from "yjs";
 
 const ydoc = new Doc();
 new WebrtcProvider("yjs-demo", ydoc, {
-  signalling: ["wss://simplifyql-m49v.vercel.app"],
+  signaling: [
+    "wss://simplifyql-m49v.vercel.app",
+    "wss://demos.yjs.dev",
+    "wss://simplifyql.vercel.app",
+  ],
 });
 
 export default ydoc;
