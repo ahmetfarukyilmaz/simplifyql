@@ -17,3 +17,11 @@ def check_primary_key(tables: list[TableSchema]):
             return False, table.name, "no primary key"
 
     return True, None, None
+
+
+def check_table_names(tables: list[TableSchema]):
+    # table names are unique
+    table_names = [table.name for table in tables]
+    # return the name of the table that is duplicated
+    if len(table_names) != len(set(table_names)):
+        return False, table_names[0], "duplicate table name"

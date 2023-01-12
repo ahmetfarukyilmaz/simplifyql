@@ -1,7 +1,7 @@
 from ninja.errors import HttpError
 from sql.enums import NodeType
 from sql.schema import AttributeSchema, AttributeTypeSchema, EdgeSchema, NodeSchema, TableSchema
-from sql.utils.check_constraints import check_primary_key
+from sql.utils.check_constraints import check_primary_key, check_table_names
 
 
 def initialize_tables(data: list[NodeSchema]):
@@ -10,7 +10,12 @@ def initialize_tables(data: list[NodeSchema]):
     attributes = add_attribute_types_to_attributes(attributes, attribute_types)
     tables = add_attributes_to_tables(tables, attributes)
     primary_key_check, table_name, error_message = check_primary_key(tables)
+    table_name_check, table_name, error_message = check_table_names(tables)
+
     if not primary_key_check:
+        raise HttpError(400, f"Table {table_name} has {error_message}")
+
+    if not table_name_check:
         raise HttpError(400, f"Table {table_name} has {error_message}")
 
     return tables
