@@ -63,7 +63,9 @@ export function RegisterPage() {
     try {
       const response = await request.post("/users/register", values);
       const token = response.data.auth_token;
+      const email = response.data.email;
       localStorage.setItem("token", token);
+      localStorage.setItem("email", email);
       window.location.href = "/canvas";
     } catch (error) {
       showNotification({

@@ -1,0 +1,26 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "simplifyql/wsgi.py",
+            "use": "@vercel/python",
+            "config": {
+                "maxLambdaSize": "10mb",
+                "runtime": "python3.9"
+            }
+        },
+        {
+            "src": "build.sh",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "staticfiles_build"
+            }
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "simplifyql/wsgi.py"
+        }
+    ]
+}
