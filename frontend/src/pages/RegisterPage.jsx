@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -9,6 +10,7 @@ import {
   Title,
   Text,
   Anchor,
+  LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
@@ -46,6 +48,7 @@ export function RegisterPage() {
   }
 
   const { classes } = useStyles();
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     initialValues: {
       email: "",
@@ -60,6 +63,7 @@ export function RegisterPage() {
   });
 
   const onSubmit = async (values) => {
+    setLoading(true);
     try {
       const response = await request.post("/users/register", values);
       const token = response.data.auth_token;
@@ -74,10 +78,12 @@ export function RegisterPage() {
         color: "red",
       });
     }
+    setLoading(false);
   };
 
   return (
     <div className={classes.wrapper}>
+      <LoadingOverlay visible={loading} />
       <Paper className={classes.form} radius={0} p={30}>
         <Title
           order={2}

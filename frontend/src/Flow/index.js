@@ -156,6 +156,7 @@ function Flow() {
   };
 
   const handleAutoSave = async () => {
+    setLoading(true);
     const data = {
       raw_data: rfInstance.toObject(),
     };
@@ -177,6 +178,7 @@ function Flow() {
         color: "red",
       });
     }
+    setLoading(false);
   };
 
   return (
