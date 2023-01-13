@@ -10,11 +10,9 @@ def initialize_tables(data: list[NodeSchema]):
     attributes = add_attribute_types_to_attributes(attributes, attribute_types)
     tables = add_attributes_to_tables(tables, attributes)
     primary_key_check, table_name, error_message = check_primary_key(tables)
-    table_name_check, table_name, error_message = check_table_names(tables)
-
     if not primary_key_check:
         raise HttpError(400, f"Table {table_name} has {error_message}")
-
+    table_name_check, table_name, error_message = check_table_names(tables)
     if not table_name_check:
         raise HttpError(400, f"{table_name}, {error_message}")
 
