@@ -25,3 +25,5 @@ def check_table_names(tables: list[TableSchema]):
     # return the name of the table that is duplicated
     if len(table_names) != len(set(table_names)):
         return False, table_names[0], "duplicate table name"
+
+    return True, None, None
