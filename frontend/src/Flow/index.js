@@ -4,12 +4,12 @@ import ReactFlow, { Background, Controls, ReactFlowProvider } from "reactflow";
 import "reactflow/dist/style.css";
 
 import {
-  Button,
   Badge,
-  Modal,
+  Button,
   Input,
-  Switch,
   LoadingOverlay,
+  Modal,
+  Switch,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import ContextMenuReact from "components/ContextMenuReact";
@@ -17,10 +17,10 @@ import RelationshipMenu from "components/RelationshipMenu";
 import CustomConnectionLine from "edges/CustomConnectionLine";
 import SimpleFloatingEdge from "edges/SimpleFloatingEdge";
 import {
-  TableNode,
-  AttributeNode,
   AttributeConstraintNode,
+  AttributeNode,
   AttributeTypeNode,
+  TableNode,
 } from "nodes";
 import useStore from "store/store";
 import useEdgesStateSynced from "useEdgesStateSynced";
