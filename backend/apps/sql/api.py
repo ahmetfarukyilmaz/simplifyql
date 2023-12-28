@@ -16,8 +16,7 @@ UserModel = get_user_model()
 @router.post("/create-tables", response={200: str, 400: ErrorSchema})
 def create_tables(request, data: SqlSchema):
     auth_token = request.headers.get("Authorization")
-    user = UserModel.objects.filter(auth_token=auth_token).first()
-    if user is None:
+    if (user := UserModel.objects.filter(auth_token=auth_token).first()) is None:
         return 400, ErrorSchema(detail="Invalid credentials")
 
     nodes = data.nodes
@@ -40,8 +39,7 @@ def create_tables(request, data: SqlSchema):
 @router.get("/get-er-diagrams", response={200: list, 400: ErrorSchema})
 def get_er_diagrams(request):
     auth_token = request.headers.get("Authorization")
-    user = UserModel.objects.filter(auth_token=auth_token).first()
-    if user is None:
+    if (user := UserModel.objects.filter(auth_token=auth_token).first()) is None:
         return 400, ErrorSchema(detail="Invalid credentials")
 
     er_diagrams = get_er_diagrams_helper(user=user)
@@ -51,12 +49,10 @@ def get_er_diagrams(request):
 @router.get("restore-er-diagram/{id}", response={200: dict, 400: ErrorSchema})
 def restore_er_diagram(request, id: int):
     auth_token = request.headers.get("Authorization")
-    user = UserModel.objects.filter(auth_token=auth_token).first()
-    if user is None:
+    if (user := UserModel.objects.filter(auth_token=auth_token).first()) is None:
         return 400, ErrorSchema(detail="Invalid credentials")
 
-    er_diagram = ErDiagram.objects.filter(id=id, user=user).first()
-    if er_diagram is None:
+    if (er_diagram := ErDiagram.objects.filter(id=id, user=user).first()) is None:
         return 400, ErrorSchema(detail="ER Diagram not found")
 
     return er_diagram.data
@@ -69,12 +65,10 @@ def update_er_diagram(
     id,
 ):
     auth_token = request.headers.get("Authorization")
-    user = UserModel.objects.filter(auth_token=auth_token).first()
-    if user is None:
+    if (user := UserModel.objects.filter(auth_token=auth_token).first()) is None:
         return 400, ErrorSchema(detail="Invalid credentials")
 
-    er_diagram = ErDiagram.objects.filter(id=id, user=user).first()
-    if er_diagram is None:
+    if (er_diagram := ErDiagram.objects.filter(id=id, user=user).first()) is None:
         return 400, ErrorSchema(detail="ER Diagram not found")
 
     er_diagram.data = data.raw_data

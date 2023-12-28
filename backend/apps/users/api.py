@@ -21,8 +21,7 @@ def register(request, payload: RegisterSchema):
 
 @router.post("/login", response={200: UserSchema, 400: ErrorSchema})
 def login(request, payload: RegisterSchema):
-    user = UserModel.objects.filter(email=payload.email).first()
-    if user is None:
+    if (user := UserModel.objects.filter(email=payload.email).first()) is None:
         return 400, ErrorSchema(detail="UserSchema not found")
     if user.check_password(payload.password):
         return 200, UserSchema(
