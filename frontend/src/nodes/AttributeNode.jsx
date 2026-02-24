@@ -10,7 +10,7 @@ import {
 import useStore from "store/store";
 import { nodesMap } from "useNodesStateSynced";
 import { UpdateAttributeConstraintNodePositions } from "utils/calculateNodePosition";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 
 const selector = (state) => ({
   nodes: state.nodes,

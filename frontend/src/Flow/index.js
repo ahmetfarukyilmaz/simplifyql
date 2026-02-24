@@ -26,7 +26,7 @@ import useStore from "store/store";
 import useEdgesStateSynced from "useEdgesStateSynced";
 import useNodesStateSynced from "useNodesStateSynced";
 import request from "utils/request";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 
 import { markers } from "./markers";
 
@@ -230,24 +230,6 @@ function Flow() {
         </Button>
       )}
 
-      {/* <Button
-        color="dark"
-        sx={{ position: "absolute", top: 150, right: 20 }}
-        onClick={() => {
-          console.log(nodes);
-        }}
-      >
-        Log Nodes
-      </Button>
-      <Button
-        color="dark"
-        sx={{ position: "absolute", top: 200, right: 20 }}
-        onClick={() => {
-          console.log(edges);
-        }}
-      >
-        Log Edges
-      </Button> */}
       <Switch
         color="dark"
         labelPosition="left"

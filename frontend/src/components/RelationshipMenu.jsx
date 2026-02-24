@@ -3,7 +3,7 @@ import "react-contexify/dist/ReactContexify.css";
 
 import useStore from "store/store";
 import { edgesMap } from "useEdgesStateSynced";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 
 const MENU_ID = "relationship-menu";
 

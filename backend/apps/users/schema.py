@@ -13,6 +13,6 @@ class ErrorSchema(Schema):
 
 
 class UserSchema(Schema):
-    id: int
+    id: UUID
     email: str
     auth_token: UUID
