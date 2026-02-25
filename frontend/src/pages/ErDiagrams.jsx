@@ -7,7 +7,7 @@ import { useListState } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import useStore from "store/store";
 import request from "utils/request";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 
 import { NotFoundImage } from "./DiagramNotFound";
 

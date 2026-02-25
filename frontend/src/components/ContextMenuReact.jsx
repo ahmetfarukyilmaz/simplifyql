@@ -4,7 +4,7 @@ import "react-contexify/dist/ReactContexify.css";
 import { showNotification } from "@mantine/notifications";
 import useStore from "store/store";
 import { nodesMap } from "useNodesStateSynced";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 
 const MENU_ID = "main-menu";
 

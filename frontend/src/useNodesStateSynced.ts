@@ -10,7 +10,7 @@ import {
 } from "reactflow";
 
 import useStore from "store/store";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 
 import { edgesMap } from "./useEdgesStateSynced";
 import ydoc from "./ydoc";

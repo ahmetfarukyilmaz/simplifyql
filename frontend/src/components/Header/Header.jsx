@@ -18,55 +18,40 @@ const useStyles = createStyles((theme) => ({
     padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
     borderRadius: theme.radius.sm,
     transition: "background-color 100ms ease",
-
     "&:hover": {
       backgroundColor:
         theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
     },
-
     [theme.fn.smallerThan("xs")]: {
       display: "none",
     },
   },
-
   userActive: {
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
   },
   githubLogo: {
-    width: "34px",
-    height: "34px",
-    borderRadius: "8px",
+    width: 34,
+    height: 34,
+    borderRadius: 8,
     border: "1px solid #dee2e6",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    color: "#495057",
-    backgroundColor: "#fff",
-    textSizeAdjust: "100%",
-    colorScheme: "light",
-    lineHeight: "1.55",
-    WebkitFontSmoothing: "antialiased",
     background: "transparent",
-    WebkitBoxFlex: "0",
-    flexGrow: "0",
-    fontFamily:
-      "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji",
     cursor: "pointer",
-    padding: "0",
-    appearance: "none",
-    fontSize: "16px",
-    textAlign: "left",
+    padding: 0,
     textDecoration: "none",
-    boxSizing: "border-box",
-    WebkitTapHighlightColor: "transparent",
+  },
+  navLink: {
+    textDecoration: "none",
+    color: theme.black,
   },
 }));
 
 export default function Header() {
   const email = localStorage.getItem("email");
   const { classes, cx } = useStyles();
-
   const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   const onLogout = () => {
@@ -75,55 +60,21 @@ export default function Header() {
   };
 
   return (
-    <MantineHeader
-      sx={{
-        display: "flex",
-        alignItems: "center",
-      }}
-      height={80}
-      p="md"
-    >
-      <h2
-        style={{
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          width: "100%",
-          paddingLeft: "30px",
-        }}
-      >
+    <MantineHeader sx={{ display: "flex", alignItems: "center" }} height={80} p="md">
+      <h2 style={{ display: "flex", alignItems: "center", width: "100%", paddingLeft: 30 }}>
         SimplifyQL
       </h2>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          width: "100%",
-          paddingRight: "30px",
-          gap: "20px",
-        }}
-      >
-        <Link
-          style={{ textDecoration: "none", color: "black" }}
-          to="/er-diagrams"
-        >
-          My ER Diagrams
-        </Link>
-        <Link style={{ textDecoration: "none", color: "black" }} to="/canvas">
-          ER Diagram Builder
-        </Link>
+      <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", width: "100%", paddingRight: 30, gap: 20 }}>
+        <Link className={classes.navLink} to="/er-diagrams">My ER Diagrams</Link>
+        <Link className={classes.navLink} to="/canvas">ER Diagram Builder</Link>
         <a
           className={classes.githubLogo}
           href="https://github.com/ahmetfarukyilmaz/simplifyql"
           target="_blank"
+          rel="noreferrer"
         >
-          <img
-            src={github_logo}
-            style={{ height: "30px", width: "30px" }}
-            alt="github logo"
-          />
+          <img src={github_logo} style={{ height: 30, width: 30 }} alt="GitHub" />
         </a>
 
         <Menu
@@ -133,11 +84,7 @@ export default function Header() {
           onOpen={() => setUserMenuOpened(true)}
         >
           <Menu.Target>
-            <UnstyledButton
-              className={cx(classes.user, {
-                [classes.userActive]: userMenuOpened,
-              })}
-            >
+            <UnstyledButton className={cx(classes.user, { [classes.userActive]: userMenuOpened })}>
               <Group spacing={7}>
                 <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
                   {email}
@@ -147,10 +94,7 @@ export default function Header() {
             </UnstyledButton>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item
-              onClick={onLogout}
-              icon={<IconLogout size={14} stroke={1.5} />}
-            >
+            <Menu.Item onClick={onLogout} icon={<IconLogout size={14} stroke={1.5} />}>
               Logout
             </Menu.Item>
           </Menu.Dropdown>

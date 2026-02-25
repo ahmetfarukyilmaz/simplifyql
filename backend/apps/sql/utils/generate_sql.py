@@ -5,64 +5,39 @@ from sql.utils.relationships import (
 )
 
 
-def generate_sql_code(tables):
-    # Generate the SQL code for the tables
-    sql_code = ""
-    for table in tables:
-        # Start the CREATE TABLE statement, but use double quotes for the table name
-        sql_code += 'CREATE TABLE "{}" (\n'.format(table.name)
+def _build_column_def(attribute):
+    """Build a single column definition string."""
+    column = f'"{attribute.name}" {attribute.type}'
 
-        # Generate the column definitions for the table
+    if attribute.length:
+        column += f"({attribute.length})"
+
+    if attribute.constraints is not None:
+        column += " NULL" if attribute.constraints.nullable else " NOT NULL"
+        if attribute.constraints.primary_key:
+            column += " PRIMARY KEY"
+        if attribute.constraints.unique:
+            column += " UNIQUE"
+
+    return column
+
+
+def generate_sql_code(tables):
+    sql_code = ""
+
+    for table in tables:
         columns = []
         indexes = []
+
         for attribute in table.attributes:
-            # Get the column name and data type
-            column_name = attribute.name
-            column_type = attribute.type
+            columns.append(_build_column_def(attribute))
 
-            # Add the column definition to the list of columns, use quotes for the column name
-            column = '"{}" {}'.format(column_name, column_type)
+            if attribute.constraints and attribute.constraints.index:
+                index_name = f"{table.name}_{attribute.name}_index"
+                indexes.append(f'CREATE INDEX "{index_name}" ON "{table.name}" ("{attribute.name}");\n\n')
 
-            # Check if the column has a length specified
-            if attribute.length:
-                column += "({})".format(attribute.length)
-
-            # Check if the column has constraints specified
-            if attribute.constraints is not None:
-                # Check if the column is not nullable
-                if attribute.constraints.nullable:
-                    column += " NULL"
-                else:
-                    column += " NOT NULL"
-
-                # Check if the column is a primary key
-                if attribute.constraints.primary_key:
-                    column += " PRIMARY KEY"
-
-                # Check if the column is unique
-                if attribute.constraints.unique:
-                    column += " UNIQUE"
-
-            # Add the column to the list of columns
-            columns.append(column)
-
-            # Check if the column is indexed
-            if attribute.constraints.index:
-                index_name = "{}_{}_index".format(table.name, column_name)
-                # use double quotes for the table name
-                index = 'CREATE INDEX "{}" ON "{}" ("{}");\n\n'.format(index_name, table.name, column_name)
-                indexes.append(index)
-
-        # Concatenate the list of columns with a comma and a newline
         column_defs = ",\n".join(columns)
-
-        # Add the column definitions to the CREATE TABLE statement
-        sql_code += "{}\n".format(column_defs)
-
-        # End the CREATE TABLE statement
-        sql_code += ");\n\n"
-
-        # Add the indexes to the SQL code
+        sql_code += f'CREATE TABLE "{table.name}" (\n{column_defs}\n);\n\n'
         sql_code += "".join(indexes)
 
     for table in tables:

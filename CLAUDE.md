@@ -219,7 +219,7 @@ All `/sql/` endpoints require an `Authorization` header with the user's `auth_to
 - **App path**: `sys.path` includes `backend/apps/`, so imports use short names: `from sql.models import ErDiagram`
 - **API framework**: Django Ninja — define routes with `@router.post(...)` / `@router.get(...)`, use Pydantic `Schema` classes for request/response validation
 - **Base model**: All models inherit from `CoreModel` which provides `created_at`, `updated_at`, `is_active`, and a `data` JSONField
-- **Auth pattern**: Manual token check in each endpoint via `request.headers.get("Authorization")` matched against `CustomUser.auth_token`
+- **Auth pattern**: `AuthBearer` (Django Ninja's `HttpBearer`) applied at the router level via `Router(auth=AuthBearer())`; authenticated user available as `request.auth`
 - **Error handling**: Raise `HttpError(status, message)` for business logic errors; Pydantic `ValidationError` is caught globally and returns 422
 - **User model**: Custom user with UUID primary key, email as username (no `username` field), auth token generated on creation
 

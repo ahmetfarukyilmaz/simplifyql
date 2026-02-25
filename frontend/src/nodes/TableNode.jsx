@@ -15,7 +15,7 @@ import { AttributeNode } from "nodes";
 import useStore from "store/store";
 import { nodesMap } from "useNodesStateSynced";
 import { UpdateAttributeNodePositions } from "utils/calculateNodePosition";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 
 import style from "./TableNode.module.css";
 

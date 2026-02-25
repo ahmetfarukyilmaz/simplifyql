@@ -81,7 +81,7 @@ function SimpleFloatingEdge({
             radius="xl"
             compact
           >
-            Change Relationsip
+            Change Relationship
           </Button>
         </div>
       </foreignObject>
